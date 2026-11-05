@@ -349,15 +349,15 @@
       margin-top: 3px;
     }
 
-    /* Плашка со списком участников под таймером (в виде пилюль) */
+    /* Плашка со списком участников под таймером */
     .participants-bar {
       border: 1px solid var(--border);
       background: #faf4f4;
       border-radius: var(--radius);
-      padding: 12px 16px;
+      padding: 10px 14px;
       display: flex;
-      align-items: center;
-      gap: 12px;
+      align-items: baseline;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
@@ -372,59 +372,75 @@
     .pills-container {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
-      gap: 6px;
+      align-items: baseline;
+      gap: 4px 6px;
       flex: 1;
+      line-height: 1.5;
     }
 
     .user-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
       font-family: var(--font-mono);
-      font-size: 11px;
-      background: var(--pill-bg);
-      border: 1px solid var(--pill-border);
-      color: var(--text-main);
-      padding: 3px 9px;
-      border-radius: 12px;
+      font-size: 11.5px;
+      color: var(--text-secondary);
       text-decoration: none;
-      transition: background 0.15s ease, border-color 0.15s ease;
       text-transform: lowercase;
     }
 
-    .user-pill:hover {
-      background: #edd8d8;
-      border-color: var(--border-dark);
+    .user-pill-tag {
+      color: var(--text-secondary);
     }
 
-    .user-pill-tag {
-      color: var(--accent);
+    .user-pill-sep {
+      color: var(--text-tertiary);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+      user-select: none;
     }
 
     .user-pill-more {
       font-family: var(--font-mono);
-      font-size: 10.5px;
+      font-size: 11px;
       color: var(--text-tertiary);
       cursor: pointer;
       text-decoration: underline;
       text-underline-offset: 2px;
+      white-space: nowrap;
+      transition: color 0.15s ease;
     }
 
-    /* Маршрут: ТРЦ с метро напротив, стрелка, парк */
-    .route-wrapper {
+    .user-pill-more:hover {
+      color: var(--accent);
+    }
+
+    /* Блок локации */
+    .location-bar {
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px 20px;
+      padding: 12px 14px;
       background: var(--card-bg);
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      align-items: flex-start;
+      gap: 10px;
     }
 
-    .route-point {
+    .location-bar-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      text-transform: lowercase;
+      white-space: nowrap;
+      margin-top: 3px;
+    }
+
+    .location-content {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
       flex: 1;
+    }
+
+    .location-main {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -464,38 +480,12 @@
       flex-shrink: 0;
     }
 
-    /* Анимированная стрелка в красном акценте */
-    .route-indicator {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-    }
-
-    .animated-arrow {
-      width: 22px;
-      height: 22px;
-      stroke: var(--accent);
-      stroke-width: 2;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      animation: arrowMotion 2s ease-in-out infinite;
-    }
-
-    @keyframes arrowMotion {
-      0% {
-        transform: translateX(-3px);
-        opacity: 0.5;
-      }
-      50% {
-        transform: translateX(3px);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(-3px);
-        opacity: 0.5;
-      }
+    .location-desc {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      line-height: 1.4;
     }
 
     /* 3 Раздельные плашки в ряд */
@@ -679,14 +669,13 @@
         gap: 18px;
       }
 
-      .route-wrapper {
+      .location-bar {
         flex-direction: column;
-        align-items: flex-start;
+        gap: 6px;
       }
 
-      .route-indicator {
-        transform: rotate(90deg);
-        padding: 2px 0;
+      .location-bar-label {
+        margin-top: 0;
       }
 
       .contact-row-triplet {
@@ -783,27 +772,18 @@
           </div>
         </div>
 
-        <!-- Маршрут: ТРЦ с метро напротив, стрелка, парк -->
-        <div>
-          <div class="route-wrapper">
-            <div class="route-point">
+        <!-- Блок локации: ТРЦ, метро и описание встречи -->
+        <div class="location-bar">
+          <span class="location-bar-label">локация:</span>
+          <div class="location-content">
+            <div class="location-main">
               <span class="point-title">трц columbus</span>
               <span class="metro-tag">
                 <span class="metro-circle">9</span>
                 <span>м. пражская</span>
               </span>
             </div>
-
-            <div class="route-indicator">
-              <svg class="animated-arrow" viewBox="0 0 24 24">
-                <path d="M5 12h14"></path>
-                <path d="M12 5l7 7-7 7"></path>
-              </svg>
-            </div>
-
-            <div class="route-point">
-              <span class="point-title">парк 30-летия победы</span>
-            </div>
+            <div class="location-desc">встреча на фудкорте, а после прогулка в Парке 30-ти летия победы</div>
           </div>
         </div>
 
@@ -928,17 +908,30 @@
       function renderParticipants(list) {
         const participants = list || (typeof MEETUP_DATA !== 'undefined' ? MEETUP_DATA.participants : []) || [];
 
-        // Плашка участников под таймером (ники в виде пилюль)
+        // Плашка участников под таймером (компактный список с точками-разделителями)
         const pillsContainer = document.getElementById('pillsBarContainer');
         if (pillsContainer) {
           pillsContainer.innerHTML = '';
-          participants.forEach(p => {
+          participants.forEach((p, idx) => {
+            if (idx > 0) {
+              const sep = document.createElement('span');
+              sep.className = 'user-pill-sep';
+              sep.textContent = '•';
+              pillsContainer.appendChild(sep);
+            }
             const a = document.createElement('span');
             a.className = 'user-pill';
             const label = formatParticipantName(p, false);
             a.innerHTML = `<span class="user-pill-tag">${label}</span>`;
             pillsContainer.appendChild(a);
           });
+
+          if (participants.length > 0) {
+            const sep = document.createElement('span');
+            sep.className = 'user-pill-sep';
+            sep.textContent = '•';
+            pillsContainer.appendChild(sep);
+          }
 
           const moreLink = document.createElement('span');
           moreLink.className = 'user-pill-more';

@@ -1,58 +1,62 @@
 const MEETUP_DATA = {
+  // Основная информация о событии
   title: "следущая сходка московских гдшеров будет...",
   city: "москва",
-  status: "администратор",
+  eventType: "сходка",
   
   dateText: "воскресенье, 8 ноября 2026",
   timeText: "14:00",
   targetTime: "2026-11-08T14:00:00+03:00",
 
-  route: [
-    {
-      step: 1,
-      place: "трц columbus",
-      metro: {
-        name: "пражская",
-        line: "9",
-        color: "#999999"
-      }
+  // Локация сходки (в точности по структуре нового блока на сайте)
+  location: {
+    place: "трц columbus",
+    metro: {
+      name: "пражская",
+      line: "9",
+      color: "#999999"
     },
-    {
-      step: 2,
-      place: "парк 30-летия победы"
-    }
-  ],
+    description: "встреча на фудкорте, а после прогулка в Парке 30-ти летия победы"
+  },
 
-  // Организаторы для единой плашки
-  organizers: [
+  // Контакты и организаторы (3 карточки на главной)
+  contacts: [
     {
+      role: "администратор",
       name: "qualbyy",
       tag: "@qualbyy",
       url: "https://t.me/qualbyy"
     },
     {
+      role: "организатор",
       name: "florned",
       tag: "@Aiuey",
       url: "https://t.me/Aiuey"
+    },
+    {
+      role: "координация",
+      name: "хаб сходок мск",
+      tag: "@mskmeethub",
+      url: "https://t.me/mskmeethub"
     }
   ],
 
-  // Группа для второй плашки
-  community: {
-    title: "хаб сходок мск",
-    tag: "@mskmeethub",
-    url: "https://t.me/mskmeethub"
-  },
-
+  // Актуальный список участников (по умолчанию из базы бота)
   participants: [
-    { name: "qualbyy", tag: "@qualbyy", status: "организатор" },
-    { name: "florned", tag: "@Aiuey", status: "организатор" }
+    { name: "qualbyy", tag: "@qualbyy", status: "администратор" },
+    { name: "florned", tag: "@Aiuey", status: "организатор" },
+    { name: "cobw3bsss?¿", tag: "@cobwie", status: "участник" },
+    { name: "_ⷱ_ⷪ_ⷬ_ⷮ__ⷭ__ⷠ_ⷪ_ⷨ_ⷠ_ⷪ_ꙵ", tag: "@Ideotecwrld", status: "участник" },
+    { name: "︎ ︎", tag: "@mortuaryboy", status: "участник" },
+    { name: "Klacken", tag: "@Ardamor_r", status: "участник" },
+    { name: "Doctor_Execution", tag: "@Doctor_Arbuzek", status: "участник" },
+    { name: "𝙲𝚊𝚝𝚙𝚑𝚢𝚢𝚢𝚢𝚢", tag: "@qwertyadqwe", status: "участник" }
   ],
 
-  participantsNote: "список неточный и может меняться даже во время сходки, подробности в нашей telegram-группе",
+  participantsNote: "запись на сходку происходит в нашей telegram-группе",
   communityUrl: "https://t.me/mskmeethub",
 
-  // Вся информация: правила, админы, сторонние организаторы
+  // Вся информация: правила, админы, сторонние организаторы (вкладка 3)
   infoSections: [
     {
       title: "краткий свод правил на сходке",
@@ -82,12 +86,23 @@ const MEETUP_DATA = {
     }
   ],
 
-  // Обратная совместимость для notes
+  // Обратная совместимость для устаревших обращений
   notes: [
     "уважайте личные границы других участников: не лезьте в личное пространство без спроса, не навязывайте общение, если человек явно не настроен",
     "приходите вовремя: если опаздываете или не можете прийти — предупредите в чате или организаторам, чтобы вас не ждали зря",
     "ведите себя адекватно: сходка — это не место для пьяного дебоша, агрессии или порчи имущества (за такое — бан без права на апелляцию)"
   ],
+
+  organizers: [
+    { name: "qualbyy", tag: "@qualbyy", url: "https://t.me/qualbyy", role: "администратор" },
+    { name: "florned", tag: "@Aiuey", url: "https://t.me/Aiuey", role: "организатор" }
+  ],
+
+  community: {
+    title: "хаб сходок мск",
+    tag: "@mskmeethub",
+    url: "https://t.me/mskmeethub"
+  },
 
   footer: "mskmeethub &bull; geometry dash community"
 };
