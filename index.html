@@ -690,6 +690,70 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* Пасхалка: окно митино.pdf */
+    .easter-window {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 380px;
+      max-width: 90vw;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: popIn 0.18s ease-out;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .easter-header {
+      background: var(--tab-bar-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .easter-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+      text-transform: lowercase;
+    }
+
+    .easter-close {
+      cursor: pointer;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      line-height: 1;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .easter-close:hover {
+      color: var(--accent);
+      background: var(--accent-subtle);
+    }
+
+    .easter-body {
+      padding: 28px 20px;
+      text-align: center;
+      font-size: 15px;
+      color: var(--text-main);
+      font-family: var(--font-serif);
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -1104,6 +1168,50 @@
       }
       centerWindow();
     });
+
+    // 5. Пасхалка (Ctrl + Shift + Alt + A)
+    window.addEventListener('keydown', (e) => {
+      const isA = e.key === 'a' || e.key === 'A' || e.code === 'KeyA';
+      if (e.ctrlKey && e.shiftKey && e.altKey && isA) {
+        e.preventDefault();
+        openEasterEgg();
+      }
+    });
+
+    function openEasterEgg() {
+      const existing = document.getElementById('easterWindow');
+      if (existing) {
+        existing.remove();
+      }
+
+      const modal = document.createElement('div');
+      modal.className = 'easter-window';
+      modal.id = 'easterWindow';
+      modal.innerHTML = `
+        <div class="easter-header">
+          <span class="easter-title">митино.pdf</span>
+          <span class="easter-close" onclick="closeEasterEgg()">&times;</span>
+        </div>
+        <div class="easter-body">
+          а6 пидор ебаный
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+
+      function handleEsc(e) {
+        if (e.key === 'Escape') {
+          closeEasterEgg();
+          window.removeEventListener('keydown', handleEsc);
+        }
+      }
+      window.addEventListener('keydown', handleEsc);
+    }
+
+    function closeEasterEgg() {
+      const modal = document.getElementById('easterWindow');
+      if (modal) modal.remove();
+    }
 
     window.addEventListener('resize', () => {
       if (window.innerWidth > 680) centerWindow();
