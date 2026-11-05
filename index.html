@@ -924,36 +924,62 @@
         return `${name} (${tag})`;
       }
 
-      // Плашка участников под таймером (ники в виде пилюль)
-      const pillsContainer = document.getElementById('pillsBarContainer');
-      pillsContainer.innerHTML = '';
-      (MEETUP_DATA.participants || []).forEach(p => {
-        const a = document.createElement('span');
-        a.className = 'user-pill';
-        const label = formatParticipantName(p, false);
-        a.innerHTML = `<span class="user-pill-tag">${label}</span>`;
-        pillsContainer.appendChild(a);
-      });
+      // Отрисовка списка участников
+      function renderParticipants(list) {
+        const participants = list || (typeof MEETUP_DATA !== 'undefined' ? MEETUP_DATA.participants : []) || [];
 
-      const moreLink = document.createElement('span');
-      moreLink.className = 'user-pill-more';
-      moreLink.textContent = 'все участники →';
-      moreLink.onclick = () => switchTab('tab-participants', null);
-      pillsContainer.appendChild(moreLink);
+        // Плашка участников под таймером (ники в виде пилюль)
+        const pillsContainer = document.getElementById('pillsBarContainer');
+        if (pillsContainer) {
+          pillsContainer.innerHTML = '';
+          participants.forEach(p => {
+            const a = document.createElement('span');
+            a.className = 'user-pill';
+            const label = formatParticipantName(p, false);
+            a.innerHTML = `<span class="user-pill-tag">${label}</span>`;
+            pillsContainer.appendChild(a);
+          });
 
-      // Таблица участников (вкладка 2)
-      const pBody = document.getElementById('participantsTableBody');
-      pBody.innerHTML = '';
-      (MEETUP_DATA.participants || []).forEach((p, idx) => {
-        const tr = document.createElement('tr');
-        const display = formatParticipantName(p, true);
-        tr.innerHTML = `
-          <td style="color: var(--text-tertiary); font-family: var(--font-mono); font-size: 11px;">${idx + 1}</td>
-          <td style="font-weight: 500;">${display}</td>
-          <td><span class="role-badge">${p.status || 'участник'}</span></td>
-        `;
-        pBody.appendChild(tr);
-      });
+          const moreLink = document.createElement('span');
+          moreLink.className = 'user-pill-more';
+          moreLink.textContent = 'все участники →';
+          moreLink.onclick = () => switchTab('tab-participants', null);
+          pillsContainer.appendChild(moreLink);
+        }
+
+        // Таблица участников (вкладка 2)
+        const pBody = document.getElementById('participantsTableBody');
+        if (pBody) {
+          pBody.innerHTML = '';
+          participants.forEach((p, idx) => {
+            const tr = document.createElement('tr');
+            const display = formatParticipantName(p, true);
+            tr.innerHTML = `
+              <td style="color: var(--text-tertiary); font-family: var(--font-mono); font-size: 11px;">${idx + 1}</td>
+              <td style="font-weight: 500;">${display}</td>
+              <td><span class="role-badge">${p.status || 'участник'}</span></td>
+            `;
+            pBody.appendChild(tr);
+          });
+        }
+      }
+
+      renderParticipants(MEETUP_DATA.participants);
+
+      // Загрузка свежего списка участников из базы бота в обход кэша
+      fetch('./participants.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(res => {
+          if (!res.ok) throw new Error('Status ' + res.status);
+          return res.json();
+        })
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            renderParticipants(data);
+          }
+        })
+        .catch(err => {
+          console.log('Используется встроенный список участников:', err);
+        });
 
       // Информация и правила (вкладка 3)
       const infoContainer = document.getElementById('infoSectionsContainer');
