@@ -910,13 +910,28 @@
         document.getElementById('eventDate').textContent = `в ${MEETUP_DATA.dateText} в ${MEETUP_DATA.timeText}`;
       }
 
+      // Вспомогательная функция формата: ник (@тег)
+      function formatParticipantName(p, withLink = false) {
+        if (!p) return '';
+        if (typeof p === 'string') return p;
+        const name = p.name || 'аноним';
+        if (!p.tag) return name;
+        const tag = p.tag.startsWith('@') ? p.tag : `@${p.tag}`;
+        const cleanUser = tag.replace(/^@/, '');
+        if (withLink && cleanUser) {
+          return `${name} (<a href="https://t.me/${cleanUser}" target="_blank" rel="noopener noreferrer" class="contact-link" style="font-size:inherit;">${tag}</a>)`;
+        }
+        return `${name} (${tag})`;
+      }
+
       // Плашка участников под таймером (ники в виде пилюль)
       const pillsContainer = document.getElementById('pillsBarContainer');
       pillsContainer.innerHTML = '';
       (MEETUP_DATA.participants || []).forEach(p => {
         const a = document.createElement('span');
         a.className = 'user-pill';
-        a.innerHTML = `<span class="user-pill-tag">${p.name}</span>`;
+        const label = formatParticipantName(p, false);
+        a.innerHTML = `<span class="user-pill-tag">${label}</span>`;
         pillsContainer.appendChild(a);
       });
 
@@ -931,10 +946,11 @@
       pBody.innerHTML = '';
       (MEETUP_DATA.participants || []).forEach((p, idx) => {
         const tr = document.createElement('tr');
+        const display = formatParticipantName(p, true);
         tr.innerHTML = `
           <td style="color: var(--text-tertiary); font-family: var(--font-mono); font-size: 11px;">${idx + 1}</td>
-          <td style="font-weight: 500;">${p.name}</td>
-          <td><span class="role-badge">${p.status}</span></td>
+          <td style="font-weight: 500;">${display}</td>
+          <td><span class="role-badge">${p.status || 'участник'}</span></td>
         `;
         pBody.appendChild(tr);
       });

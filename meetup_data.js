@@ -45,8 +45,8 @@ const MEETUP_DATA = {
   },
 
   participants: [
-    { name: "qualbyy", status: "организатор" },
-    { name: "florned", status: "организатор" }
+    { name: "qualbyy", tag: "@qualbyy", status: "организатор" },
+    { name: "florned", tag: "@Aiuey", status: "организатор" }
   ],
 
   participantsNote: "список неточный и может меняться даже во время сходки, подробности в нашей telegram-группе",
