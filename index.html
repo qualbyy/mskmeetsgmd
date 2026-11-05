@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mskmeetsgmd &bull; сходка москва</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..600;1,400..600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Благородная красновато-кремовая гамма в духе герба Москвы */
+      --bg: #f5eceb;
+      --window-bg: #fdfbfb;
+      --tab-bar-bg: #ebdcdc;
+      --tab-inactive: #dfcfcf;
+      --tab-active: #fdfbfb;
+      --border: #ddcaca;
+      --border-dark: #c9b1b1;
+      --card-bg: #faf3f3;
+      --text-main: #2a1e1f;
+      --text-secondary: #665052;
+      --text-tertiary: #8c7375;
+      
+      /* Московский рубиновый цвет */
+      --accent: #9b1c20;
+      --accent-soft: #b5272c;
+      --accent-subtle: #fbeeed;
+      --pill-bg: #f4e6e6;
+      --pill-border: #e6cece;
+      
+      --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+      --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+      --radius: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      position: relative;
+    }
+
+    /* Окно браузера */
+    .browser-window {
+      background: var(--window-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 16px 42px rgba(60, 24, 28, 0.09);
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    /* Верхняя панель: кнопки окна + вкладки */
+    .browser-top {
+      background: var(--tab-bar-bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-end;
+      padding: 8px 12px 0;
+      user-select: none;
+      cursor: grab;
+      gap: 12px;
+    }
+
+    .browser-top:active {
+      cursor: grabbing;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 6px;
+      padding-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    .win-btn {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+    }
+    .btn-close { background: #d9786c; }
+    .btn-min { background: #e0b764; }
+    .btn-max { background: #88bd82; }
+
+    /* Вкладки браузера */
+    .browser-tabs {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      flex: 1;
+      overflow-x: auto;
+    }
+
+    .browser-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      background: var(--tab-inactive);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease;
+      font-family: var(--font-mono);
+      text-transform: lowercase;
+    }
+
+    .browser-tab:hover {
+      background: #e8d7d7;
+      color: var(--text-main);
+    }
+
+    .browser-tab.active {
+      background: var(--tab-active);
+      color: var(--text-main);
+      border-color: var(--border);
+      font-weight: 600;
+      position: relative;
+      margin-bottom: -1px;
+      padding-bottom: 7px;
+    }
+
+    .tab-close-icon {
+      font-size: 10px;
+      opacity: 0.5;
+    }
+
+    /* Адресная строка браузера */
+    .browser-toolbar {
+      background: var(--tab-active);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 6px;
+      color: var(--text-tertiary);
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .url-bar {
+      flex: 1;
+      background: #f7eded;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+    }
+
+    .url-lock {
+      color: var(--accent);
+      width: 11px;
+      height: 11px;
+      stroke-width: 2;
+    }
+
+    .url-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Содержимое окна — типографика Lora */
+    .browser-content {
+      font-family: var(--font-serif);
+      font-size: 14.5px;
+      line-height: 1.7;
+      color: var(--text-main);
+      overflow-y: auto;
+      padding: 28px 30px;
+      flex: 1;
+      position: relative;
+    }
+
+    .browser-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .browser-content::-webkit-scrollbar-thumb {
+      background-color: var(--border);
+      border-radius: 3px;
+    }
+
+    /* Плавная анимация перелистывания */
+    .tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.22s ease-out, transform 0.22s ease-out;
+    }
+
+    .tab-panel.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+      animation: tabFadeSlide 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes tabFadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Вкладка 1: Главная информация */
+    .main-meta {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .meta-sub {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: lowercase;
+      color: var(--text-tertiary);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .meta-sub-accent {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .main-title {
+      font-size: 23px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      color: var(--text-main);
+      margin-bottom: 6px;
+      text-transform: lowercase;
+    }
+
+    .main-date {
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 14px;
+      text-transform: lowercase;
+    }
+
+    /* Блок обратного отсчета — строго по центру */
+    .countdown-section {
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .countdown-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: lowercase;
+      color: var(--text-tertiary);
+      margin-bottom: 10px;
+    }
+
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      font-family: var(--font-mono);
+    }
+
+    .countdown-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 44px;
+    }
+
+    .countdown-val {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1.1;
+    }
+
+    .countdown-sub {
+      font-size: 10px;
+      color: var(--text-tertiary);
+      text-transform: lowercase;
+      margin-top: 3px;
+    }
+
+    /* Плашка со списком участников под таймером (в виде пилюль) */
+    .participants-bar {
+      border: 1px solid var(--border);
+      background: #faf4f4;
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .participants-bar-label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      text-transform: lowercase;
+      white-space: nowrap;
+    }
+
+    .pills-container {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .user-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--text-main);
+      padding: 3px 9px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.15s ease, border-color 0.15s ease;
+      text-transform: lowercase;
+    }
+
+    .user-pill:hover {
+      background: #edd8d8;
+      border-color: var(--border-dark);
+    }
+
+    .user-pill-tag {
+      color: var(--accent);
+    }
+
+    .user-pill-more {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* Маршрут: ТРЦ с метро напротив, стрелка, парк */
+    .route-wrapper {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .route-point {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .point-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-transform: lowercase;
+    }
+
+    /* Кружок метро Серпуховско-Тимирязевской линии 9 */
+    .metro-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: lowercase;
+    }
+
+    .metro-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: #999999;
+      color: #ffffff;
+      font-size: 9.5px;
+      font-weight: 700;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* Анимированная стрелка в красном акценте */
+    .route-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+    }
+
+    .animated-arrow {
+      width: 22px;
+      height: 22px;
+      stroke: var(--accent);
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: arrowMotion 2s ease-in-out infinite;
+    }
+
+    @keyframes arrowMotion {
+      0% {
+        transform: translateX(-3px);
+        opacity: 0.5;
+      }
+      50% {
+        transform: translateX(3px);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(-3px);
+        opacity: 0.5;
+      }
+    }
+
+    /* 3 Раздельные плашки в ряд */
+    .contact-row-triplet {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .contact-card-sep {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      background: var(--card-bg);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 80px;
+    }
+
+    .contact-tag {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-tertiary);
+      text-transform: lowercase;
+    }
+
+    .contact-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-transform: lowercase;
+    }
+
+    .contact-link {
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(155, 28, 32, 0.35);
+      width: fit-content;
+      transition: border-color 0.15s ease;
+      text-transform: lowercase;
+    }
+
+    .contact-link:hover {
+      border-bottom-color: var(--accent);
+    }
+
+    /* Вкладка 2: Таблица участников */
+    .tab-section-header {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+      text-transform: lowercase;
+    }
+
+    .participants-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-transform: lowercase;
+    }
+
+    .participants-table th {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-tertiary);
+      text-align: left;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border);
+      text-transform: lowercase;
+    }
+
+    .participants-table td {
+      padding: 10px;
+      border-bottom: 1px solid #ebdada;
+    }
+
+    .participants-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .role-badge {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--accent);
+      background: var(--accent-subtle);
+      border: 1px solid rgba(155, 28, 32, 0.15);
+      padding: 2px 6px;
+      border-radius: 3px;
+      text-transform: lowercase;
+    }
+
+    .participants-note {
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 13px;
+      padding-top: 10px;
+      line-height: 1.5;
+      text-transform: lowercase;
+    }
+
+    /* Вкладка 3: Информация и правила */
+    .info-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .info-subhead {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-transform: lowercase;
+      border-left: 3px solid var(--accent);
+      padding-left: 8px;
+      margin-top: 4px;
+    }
+
+    .info-list {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-left: 4px;
+    }
+
+    .info-list li {
+      position: relative;
+      padding-left: 16px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      text-transform: lowercase;
+    }
+
+    .info-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    /* Подвал окна */
+    .window-bottom {
+      border-top: 1px solid var(--border);
+      background: var(--tab-bar-bg);
+      padding: 6px 14px;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-tertiary);
+      text-transform: lowercase;
+    }
+
+    /* Мобильная адаптация */
+    @media (max-width: 680px) {
+      body {
+        padding: 8px;
+        align-items: center;
+      }
+
+      .browser-window {
+        position: static !important;
+        transform: none !important;
+        left: auto !important;
+        top: auto !important;
+        max-height: 94vh;
+      }
+
+      .browser-top {
+        cursor: default;
+      }
+
+      .browser-content {
+        padding: 20px 16px;
+        gap: 18px;
+      }
+
+      .route-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .route-indicator {
+        transform: rotate(90deg);
+        padding: 2px 0;
+      }
+
+      .contact-row-triplet {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Окно браузера -->
+  <div class="browser-window" id="browserWindow">
+    
+    <!-- Верхняя панель с вкладками -->
+    <div class="browser-top" id="browserHeader">
+      <div class="window-controls">
+        <span class="win-btn btn-close" onclick="centerWindow()" title="закрыть"></span>
+        <span class="win-btn btn-min" onclick="centerWindow()" title="свернуть"></span>
+        <span class="win-btn btn-max" onclick="centerWindow()" title="центрировать"></span>
+      </div>
+
+      <div class="browser-tabs">
+        <div class="browser-tab active" data-tab="tab-overview" onclick="switchTab('tab-overview', this)">
+          <span>сходка</span>
+          <span class="tab-close-icon">&times;</span>
+        </div>
+        <div class="browser-tab" data-tab="tab-participants" onclick="switchTab('tab-participants', this)">
+          <span>участники</span>
+          <span class="tab-close-icon">&times;</span>
+        </div>
+        <div class="browser-tab" data-tab="tab-rules" onclick="switchTab('tab-rules', this)">
+          <span>информация</span>
+          <span class="tab-close-icon">&times;</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Адресная строка браузера -->
+    <div class="browser-toolbar">
+      <div class="nav-buttons">
+        <button class="nav-btn" title="назад">&larr;</button>
+        <button class="nav-btn" title="вперед">&rarr;</button>
+        <button class="nav-btn" title="обновить" onclick="location.reload()">&#8635;</button>
+      </div>
+
+      <div class="url-bar">
+        <svg class="url-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <span class="url-text" id="urlDisplay">https://mskmeetsgmd.github.io/</span>
+      </div>
+    </div>
+
+    <!-- Внутреннее содержимое страниц -->
+    <div class="browser-content">
+
+      <!-- Вкладка 1: Сходка -->
+      <div class="tab-panel active" id="tab-overview">
+        <div class="main-meta">
+          <div class="meta-sub">москва &bull; <span class="meta-sub-accent">сходка</span></div>
+          <h1 class="main-title" id="eventTitle">следущая сходка московских гдшеров будет...</h1>
+          <div class="main-date" id="eventDate">в воскресенье, 8 ноября 2026 в 14:00</div>
+        </div>
+
+        <!-- Таймер: строго по центру -->
+        <div class="countdown-section">
+          <div class="countdown-label">до начала встречи осталось:</div>
+          <div class="countdown-grid">
+            <div class="countdown-col">
+              <span class="countdown-val" id="cnt-days">00</span>
+              <span class="countdown-sub">дней</span>
+            </div>
+            <div class="countdown-col">
+              <span class="countdown-val" id="cnt-hours">00</span>
+              <span class="countdown-sub">часов</span>
+            </div>
+            <div class="countdown-col">
+              <span class="countdown-val" id="cnt-mins">00</span>
+              <span class="countdown-sub">минут</span>
+            </div>
+            <div class="countdown-col">
+              <span class="countdown-val" id="cnt-secs">00</span>
+              <span class="countdown-sub">секунд</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Плашка участников под таймером (ники в виде пилюль) -->
+        <div class="participants-bar">
+          <span class="participants-bar-label">участники:</span>
+          <div class="pills-container" id="pillsBarContainer">
+            <!-- Заполняется динамически -->
+          </div>
+        </div>
+
+        <!-- Маршрут: ТРЦ с метро напротив, стрелка, парк -->
+        <div>
+          <div class="route-wrapper">
+            <div class="route-point">
+              <span class="point-title">трц columbus</span>
+              <span class="metro-tag">
+                <span class="metro-circle">9</span>
+                <span>м. пражская</span>
+              </span>
+            </div>
+
+            <div class="route-indicator">
+              <svg class="animated-arrow" viewBox="0 0 24 24">
+                <path d="M5 12h14"></path>
+                <path d="M12 5l7 7-7 7"></path>
+              </svg>
+            </div>
+
+            <div class="route-point">
+              <span class="point-title">парк 30-летия победы</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Раздельные плашки: qualbyy (администратор), florned (организатор), хаб сходок мск -->
+        <div class="contact-row-triplet">
+          <!-- Плашка qualbyy -->
+          <div class="contact-card-sep">
+            <span class="contact-tag">администратор</span>
+            <span class="contact-name">qualbyy</span>
+            <a class="contact-link" href="https://t.me/qualbyy" target="_blank" rel="noopener">@qualbyy</a>
+          </div>
+
+          <!-- Плашка florned -->
+          <div class="contact-card-sep">
+            <span class="contact-tag">организатор</span>
+            <span class="contact-name">florned</span>
+            <a class="contact-link" href="https://t.me/Aiuey" target="_blank" rel="noopener">@Aiuey</a>
+          </div>
+
+          <!-- Плашка группы -->
+          <div class="contact-card-sep">
+            <span class="contact-tag">координация</span>
+            <span class="contact-name">хаб сходок мск</span>
+            <a class="contact-link" href="https://t.me/mskmeethub" target="_blank" rel="noopener">@mskmeethub &rarr;</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Вкладка 2: Участники -->
+      <div class="tab-panel" id="tab-participants">
+        <div class="tab-section-header">список подтверждённых участников</div>
+        <table class="participants-table">
+          <thead>
+            <tr>
+              <th style="width: 40px;">#</th>
+              <th>имя / никнейм</th>
+              <th style="width: 140px;">статус</th>
+            </tr>
+          </thead>
+          <tbody id="participantsTableBody">
+            <!-- Заполняется скриптом -->
+          </tbody>
+        </table>
+        <div class="participants-note">
+          список неточный и может меняться даже во время сходки, подробности в нашей <a class="contact-link" href="https://t.me/mskmeethub" target="_blank" rel="noopener">telegram-группе</a>
+        </div>
+      </div>
+
+      <!-- Вкладка 3: Информация (правила, сторонние организаторы, админы) -->
+      <div class="tab-panel" id="tab-rules">
+        <div class="tab-section-header">информация и правила</div>
+        <div id="infoSectionsContainer" style="display: flex; flex-direction: column; gap: 18px;">
+          <!-- Заполняется скриптом из meetup_data.js -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Нижняя полоса окна -->
+    <div class="window-bottom">
+      <a class="contact-link" href="https://t.me/mskmeethub" target="_blank" rel="noopener">t.me/mskmeethub</a>
+      <span id="winFooterText">разработано <a class="contact-link" href="https://qualbyy.github.io" target="_blank" rel="noopener">qualbyy</a> &bull; 2026</span>
+    </div>
+
+  </div>
+
+  <!-- Подключение конфигурации -->
+  <script src="meetup_data.js"></script>
+
+  <script>
+    // 1. Плавное переключение вкладок браузера
+    function switchTab(panelId, tabEl) {
+      document.querySelectorAll('.browser-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+
+      if (tabEl) {
+        tabEl.classList.add('active');
+      } else {
+        const found = document.querySelector(`.browser-tab[data-tab="${panelId}"]`);
+        if (found) found.classList.add('active');
+      }
+
+      const targetPanel = document.getElementById(panelId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+
+      const urlText = document.getElementById('urlDisplay');
+      if (panelId === 'tab-overview') {
+        urlText.textContent = 'https://mskmeetsgmd.github.io/';
+      } else if (panelId === 'tab-participants') {
+        urlText.textContent = 'https://mskmeetsgmd.github.io/#participants';
+      } else if (panelId === 'tab-rules') {
+        urlText.textContent = 'https://mskmeetsgmd.github.io/#info';
+      }
+    }
+
+    // 2. Наполнение данными
+    function renderData() {
+      if (typeof MEETUP_DATA === 'undefined') return;
+
+      if (MEETUP_DATA.title) document.getElementById('eventTitle').textContent = MEETUP_DATA.title;
+      if (MEETUP_DATA.dateText && MEETUP_DATA.timeText) {
+        document.getElementById('eventDate').textContent = `в ${MEETUP_DATA.dateText} в ${MEETUP_DATA.timeText}`;
+      }
+
+      // Плашка участников под таймером (ники в виде пилюль)
+      const pillsContainer = document.getElementById('pillsBarContainer');
+      pillsContainer.innerHTML = '';
+      (MEETUP_DATA.participants || []).forEach(p => {
+        const a = document.createElement('span');
+        a.className = 'user-pill';
+        a.innerHTML = `<span class="user-pill-tag">${p.name}</span>`;
+        pillsContainer.appendChild(a);
+      });
+
+      const moreLink = document.createElement('span');
+      moreLink.className = 'user-pill-more';
+      moreLink.textContent = 'все участники →';
+      moreLink.onclick = () => switchTab('tab-participants', null);
+      pillsContainer.appendChild(moreLink);
+
+      // Таблица участников (вкладка 2)
+      const pBody = document.getElementById('participantsTableBody');
+      pBody.innerHTML = '';
+      (MEETUP_DATA.participants || []).forEach((p, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="color: var(--text-tertiary); font-family: var(--font-mono); font-size: 11px;">${idx + 1}</td>
+          <td style="font-weight: 500;">${p.name}</td>
+          <td><span class="role-badge">${p.status}</span></td>
+        `;
+        pBody.appendChild(tr);
+      });
+
+      // Информация и правила (вкладка 3)
+      const infoContainer = document.getElementById('infoSectionsContainer');
+      infoContainer.innerHTML = '';
+
+      const sections = MEETUP_DATA.infoSections || [
+        {
+          title: "краткий свод правил на сходке",
+          items: MEETUP_DATA.notes || []
+        }
+      ];
+
+      sections.forEach(sec => {
+        const block = document.createElement('div');
+        block.className = 'info-block';
+        
+        const h = document.createElement('div');
+        h.className = 'info-subhead';
+        h.textContent = sec.title;
+        block.appendChild(h);
+
+        const ul = document.createElement('ul');
+        ul.className = 'info-list';
+        (sec.items || []).forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          ul.appendChild(li);
+        });
+        block.appendChild(ul);
+
+        infoContainer.appendChild(block);
+      });
+    }
+
+    // 3. Обратный отсчет таймера
+    function startTimer() {
+      if (typeof MEETUP_DATA === 'undefined' || !MEETUP_DATA.targetTime) return;
+      const target = new Date(MEETUP_DATA.targetTime).getTime();
+
+      function tick() {
+        const diff = target - new Date().getTime();
+
+        if (diff <= 0) {
+          document.getElementById('cnt-days').textContent = '00';
+          document.getElementById('cnt-hours').textContent = '00';
+          document.getElementById('cnt-mins').textContent = '00';
+          document.getElementById('cnt-secs').textContent = '00';
+          return;
+        }
+
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('cnt-days').textContent = String(d).padStart(2, '0');
+        document.getElementById('cnt-hours').textContent = String(h).padStart(2, '0');
+        document.getElementById('cnt-mins').textContent = String(m).padStart(2, '0');
+        document.getElementById('cnt-secs').textContent = String(s).padStart(2, '0');
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    // 4. Позиционирование и перемещение окна на ПК
+    const win = document.getElementById('browserWindow');
+    const header = document.getElementById('browserHeader');
+
+    function centerWindow() {
+      if (window.innerWidth <= 680) return;
+      const x = Math.max(16, Math.floor((window.innerWidth - win.offsetWidth) / 2));
+      const y = Math.max(16, Math.floor((window.innerHeight - win.offsetHeight) / 2));
+      win.style.left = x + 'px';
+      win.style.top = y + 'px';
+    }
+
+    let isDrag = false;
+    let sX = 0, sY = 0, initX = 0, initY = 0;
+
+    header.addEventListener('mousedown', (e) => {
+      if (window.innerWidth <= 680) return;
+      if (e.target.closest('.browser-tab') || e.target.closest('.win-btn')) return;
+
+      isDrag = true;
+      sX = e.clientX;
+      sY = e.clientY;
+      const r = win.getBoundingClientRect();
+      initX = r.left;
+      initY = r.top;
+      win.style.left = initX + 'px';
+      win.style.top = initY + 'px';
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+      e.preventDefault();
+    });
+
+    function onMove(e) {
+      if (!isDrag) return;
+      win.style.left = (initX + (e.clientX - sX)) + 'px';
+      win.style.top = (initY + (e.clientY - sY)) + 'px';
+    }
+
+    function onUp() {
+      isDrag = false;
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        renderData();
+      } catch (err) {
+        console.error('Ошибка рендеринга:', err);
+      }
+      try {
+        startTimer();
+      } catch (err) {
+        console.error('Ошибка таймера:', err);
+      }
+      centerWindow();
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 680) centerWindow();
+    });
+  </script>
+</body>
+</html>
