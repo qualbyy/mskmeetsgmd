@@ -114,6 +114,14 @@
       gap: 4px;
       flex: 1;
       overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+
+    .browser-tabs::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
     }
 
     .browser-tab {
