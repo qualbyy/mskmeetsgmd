@@ -70,5 +70,11 @@
     "name": "Яра",
     "tag": "@Yarafurry",
     "status": "участник"
+  },
+  {
+    "id": 1490809898,
+    "name": "<script>alert('123');</script>",
+    "tag": "",
+    "status": "участник"
   }
 ]
