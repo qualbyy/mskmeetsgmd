@@ -98,19 +98,13 @@ const MEETUP_DATA = {
     description: "встреча на фудкорте, а после прогулка в Парке 30-ти летия победы"
   },
 
-  // Контакты и организаторы (3 карточки на главной)
+  // Контакты и организаторы (карточки на главной)
   contacts: [
     {
       role: "администратор",
       name: "qualbyy",
       tag: "@qualbyy",
       url: "https://t.me/qualbyy"
-    },
-    {
-      role: "организатор",
-      name: "florned",
-      tag: "@Aiuey",
-      url: "https://t.me/Aiuey"
     },
     {
       role: "координация",
@@ -122,8 +116,8 @@ const MEETUP_DATA = {
 
   // Список участников по умолчанию
   participants: [
-    { name: "qualbyy", tag: "@qualbyy", status: "администратор" },
-    { name: "florned", tag: "@Aiuey", status: "организатор" },
+    { name: "qualbyy", tag: "@qualbyy", status: "организатор" },
+    { name: "florned", tag: "@Aiuey", status: "участник" },
     { name: "cobw3bsss?¿", tag: "@cobwie", status: "участник" },
     { name: "_ⷱ_ⷪ_ⷬ_ⷮ__ⷭ__ⷠ_ⷪ_ⷨ_ⷠ_ⷪ_ꙵ", tag: "@Ideotecwrld", status: "участник" },
     { name: "︎ ︎", tag: "@mortuaryboy", status: "участник" },
@@ -173,8 +167,7 @@ const MEETUP_DATA = {
   ],
 
   organizers: [
-    { name: "qualbyy", tag: "@qualbyy", url: "https://t.me/qualbyy", role: "администратор" },
-    { name: "florned", tag: "@Aiuey", url: "https://t.me/Aiuey", role: "организатор" }
+    { name: "qualbyy", tag: "@qualbyy", url: "https://t.me/qualbyy", role: "администратор" }
   ],
 
   community: {
