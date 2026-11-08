@@ -283,11 +283,86 @@
       color: var(--text-tertiary);
       letter-spacing: 0.04em;
       margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .meta-sub-accent {
       color: var(--accent);
       font-weight: 500;
+    }
+
+    /* Статусные бейджи */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      text-transform: lowercase;
+      letter-spacing: 0.02em;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .status-badge.status-upcoming {
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--text-secondary);
+    }
+
+    .status-badge.status-active {
+      background: #fdf0f0;
+      border: 1px solid #f0b8b8;
+      color: #9b1c20;
+    }
+
+    .status-badge.status-none {
+      background: #f0e6e6;
+      border: 1px solid #ded0d0;
+      color: var(--text-tertiary);
+    }
+
+    .pulse-dot {
+      width: 6.5px;
+      height: 6.5px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .status-active .pulse-dot {
+      background-color: #9b1c20;
+      box-shadow: 0 0 0 0 rgba(155, 28, 32, 0.65);
+      animation: pulseLive 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
+    }
+
+    .status-upcoming .pulse-dot {
+      background-color: var(--accent);
+    }
+
+    .status-none .pulse-dot {
+      background-color: var(--text-tertiary);
+    }
+
+    @keyframes pulseLive {
+      0% {
+        box-shadow: 0 0 0 0 rgba(155, 28, 32, 0.65);
+        transform: scale(0.95);
+      }
+      70% {
+        box-shadow: 0 0 0 6px rgba(155, 28, 32, 0);
+        transform: scale(1.05);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(155, 28, 32, 0);
+        transform: scale(0.95);
+      }
     }
 
     .main-title {
@@ -307,6 +382,11 @@
       text-transform: lowercase;
     }
 
+    /* Блок состояний: таймер / live-карточка / режим ожидания */
+    .state-container {
+      width: 100%;
+    }
+
     /* Блок обратного отсчета — строго по центру */
     .countdown-section {
       border: 1px solid var(--border);
@@ -318,6 +398,118 @@
       align-items: center;
       justify-content: center;
       text-align: center;
+    }
+
+    /* Карточки состояний (Live и Режим ожидания) */
+    .status-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .status-card-active {
+      background: linear-gradient(135deg, #fdf6f6 0%, #faf0f0 100%);
+      border-color: #e8c4c4;
+      box-shadow: 0 4px 18px rgba(155, 28, 32, 0.05);
+    }
+
+    .status-card-none {
+      background: var(--card-bg);
+      border-color: var(--border);
+    }
+
+    .live-card-head, .none-card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      flex-wrap: wrap;
+    }
+
+    .live-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: lowercase;
+      letter-spacing: 0.03em;
+    }
+
+    .live-timer-text {
+      color: var(--text-secondary);
+      font-style: italic;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .none-indicator {
+      font-weight: 500;
+      color: var(--text-tertiary);
+      letter-spacing: 0.03em;
+    }
+
+    .none-subtext {
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
+    .status-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .status-card-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.35;
+      text-transform: lowercase;
+    }
+
+    .status-card-desc {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    .status-card-actions {
+      margin-top: 2px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .status-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      background: var(--accent);
+      color: #ffffff;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-decoration: none;
+      transition: background 0.15s ease, transform 0.1s ease;
+      cursor: pointer;
+    }
+
+    .status-action-btn:hover {
+      background: var(--accent-soft);
+      transform: translateY(-1px);
     }
 
     .countdown-label {
@@ -430,6 +622,33 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .location-bar.is-active-meetup {
+      border-color: #e5baba;
+      background: #fdf5f5;
+    }
+
+    .location-live-badge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 1px 5px;
+      background: var(--accent);
+      color: #ffffff;
+      border-radius: 10px;
+      margin-left: 5px;
+      text-transform: lowercase;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+
+    .participants-placeholder, .location-placeholder {
+      font-family: var(--font-serif);
+      font-style: italic;
+      color: var(--text-tertiary);
+      font-size: 13px;
+      line-height: 1.4;
     }
 
     .location-bar-label {
@@ -647,10 +866,101 @@
       padding: 6px 14px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-family: var(--font-mono);
       font-size: 10.5px;
       color: var(--text-tertiary);
       text-transform: lowercase;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Переключатель статусов в футере */
+    .status-switcher {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+    }
+
+    .switcher-label {
+      color: var(--text-tertiary);
+      margin-right: 2px;
+      text-transform: lowercase;
+    }
+
+    .switcher-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 10.5px;
+      font-family: inherit;
+      cursor: pointer;
+      text-transform: lowercase;
+      transition: all 0.15s ease;
+      line-height: 1.3;
+    }
+
+    .switcher-btn:hover {
+      background: var(--card-bg);
+      color: var(--text-main);
+      border-color: var(--border-dark);
+    }
+
+    .switcher-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* Всплывающая плашка-подсказка при переключении */
+    .status-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--window-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(60, 24, 28, 0.15);
+      padding: 10px 16px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 99999;
+      max-width: 90vw;
+      text-align: left;
+    }
+
+    .status-toast.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .status-toast-text code {
+      background: var(--pill-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: var(--accent);
+      font-size: 11px;
+    }
+
+    .status-toast-close {
+      cursor: pointer;
+      color: var(--text-tertiary);
+      font-size: 14px;
+      line-height: 1;
     }
 
     /* Мобильная адаптация */
@@ -688,6 +998,17 @@
 
       .contact-row-triplet {
         grid-template-columns: 1fr;
+      }
+
+      .window-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .status-switcher {
+        width: 100%;
+        justify-content: flex-start;
       }
     }
 
@@ -808,59 +1129,104 @@
       <!-- Вкладка 1: Сходка -->
       <div class="tab-panel active" id="tab-overview">
         <div class="main-meta">
-          <div class="meta-sub">москва &bull; <span class="meta-sub-accent">сходка</span></div>
+          <div class="meta-sub">
+            <span id="cityText">москва</span> &bull; <span class="meta-sub-accent" id="eventTypeText">сходка</span>
+            <span class="status-badge status-active" id="statusBadge">
+              <span class="pulse-dot"></span>
+              <span id="statusBadgeText">сходка идет сейчас</span>
+            </span>
+          </div>
           <h1 class="main-title" id="eventTitle">следущая сходка московских гдшеров будет...</h1>
           <div class="main-date" id="eventDate">в воскресенье, 8 ноября 2026 в 14:00</div>
         </div>
 
-        <!-- Таймер: строго по центру -->
-        <div class="countdown-section">
-          <div class="countdown-label">до начала встречи осталось:</div>
-          <div class="countdown-grid">
-            <div class="countdown-col">
-              <span class="countdown-val" id="cnt-days">00</span>
-              <span class="countdown-sub">дней</span>
+        <!-- Центральный блок состояний: Таймер / Live / Режим ожидания -->
+        <div class="state-container">
+          <!-- 1. Состояние: сходка запланирована (Таймер) -->
+          <div class="countdown-section" id="stateUpcomingSection">
+            <div class="countdown-label" id="countdownLabel">до начала встречи осталось:</div>
+            <div class="countdown-grid">
+              <div class="countdown-col">
+                <span class="countdown-val" id="cnt-days">00</span>
+                <span class="countdown-sub">дней</span>
+              </div>
+              <div class="countdown-col">
+                <span class="countdown-val" id="cnt-hours">00</span>
+                <span class="countdown-sub">часов</span>
+              </div>
+              <div class="countdown-col">
+                <span class="countdown-val" id="cnt-mins">00</span>
+                <span class="countdown-sub">минут</span>
+              </div>
+              <div class="countdown-col">
+                <span class="countdown-val" id="cnt-secs">00</span>
+                <span class="countdown-sub">секунд</span>
+              </div>
             </div>
-            <div class="countdown-col">
-              <span class="countdown-val" id="cnt-hours">00</span>
-              <span class="countdown-sub">часов</span>
+          </div>
+
+          <!-- 2. Состояние: сходка идет прямо сейчас (Live) -->
+          <div class="status-card status-card-active" id="stateActiveSection" style="display: none;">
+            <div class="live-card-head">
+              <span class="live-indicator"><span class="pulse-dot"></span> сходка в процессе</span>
+              <span class="live-timer-text" id="liveElapsedText">встреча в самом разгаре</span>
             </div>
-            <div class="countdown-col">
-              <span class="countdown-val" id="cnt-mins">00</span>
-              <span class="countdown-sub">минут</span>
+            <div class="status-card-body">
+              <div class="status-card-title" id="liveTitle">сходка идет прямо сейчас!</div>
+              <div class="status-card-desc" id="liveDesc">мы уже собрались на месте встречи. присоединяйтесь к нам на локации или напишите организаторам, если не можете нас найти.</div>
             </div>
-            <div class="countdown-col">
-              <span class="countdown-val" id="cnt-secs">00</span>
-              <span class="countdown-sub">секунд</span>
+            <div class="status-card-actions">
+              <a class="status-action-btn" id="liveChatBtn" href="https://t.me/mskmeethub" target="_blank" rel="noopener">написать в чат сообщества &rarr;</a>
+            </div>
+          </div>
+
+          <!-- 3. Состояние: пока сходок не планируется (None) -->
+          <div class="status-card status-card-none" id="stateNoneSection" style="display: none;">
+            <div class="none-card-head">
+              <span class="none-indicator">[ режим ожидания ]</span>
+              <span class="none-subtext">анонс появится здесь</span>
+            </div>
+            <div class="status-card-body">
+              <div class="status-card-title" id="noneTitle">пока сходок не планируется</div>
+              <div class="status-card-desc" id="noneDesc">мы готовим следующую встречу. любой желающий может предложить сходку: если дата и место наберут 6+ голосов в чате, мы объявим сходку официально!</div>
+            </div>
+            <div class="status-card-actions">
+              <a class="status-action-btn" id="noneActionBtn" href="https://t.me/mskmeethub" target="_blank" rel="noopener">предложить сходку в telegram &rarr;</a>
             </div>
           </div>
         </div>
 
         <!-- Плашка участников под таймером (ники в виде пилюль) -->
-        <div class="participants-bar">
-          <span class="participants-bar-label">участники:</span>
+        <div class="participants-bar" id="participantsBar">
+          <span class="participants-bar-label" id="participantsBarLabel">участники:</span>
           <div class="pills-container" id="pillsBarContainer">
             <!-- Заполняется динамически -->
+          </div>
+          <div class="participants-placeholder" id="participantsPlaceholder" style="display: none;">
+            запись откроется после официального анонса даты в нашей telegram-группе
           </div>
         </div>
 
         <!-- Блок локации: ТРЦ, метро и описание встречи -->
-        <div class="location-bar">
-          <span class="location-bar-label">локация:</span>
-          <div class="location-content">
+        <div class="location-bar" id="locationBar">
+          <span class="location-bar-label" id="locationLabel">локация:</span>
+          <div class="location-content" id="locationContent">
             <div class="location-main">
-              <span class="point-title">трц columbus</span>
-              <span class="metro-tag">
-                <span class="metro-circle">9</span>
-                <span>м. пражская</span>
+              <span class="point-title" id="locationPlace">трц columbus</span>
+              <span class="metro-tag" id="locationMetroTag">
+                <span class="metro-circle" id="locationMetroCircle">9</span>
+                <span id="locationMetroName">м. пражская</span>
               </span>
             </div>
-            <div class="location-desc">встреча на фудкорте, а после прогулка в Парке 30-ти летия победы</div>
+            <div class="location-desc" id="locationDesc">встреча на фудкорте, а после прогулка в Парке 30-ти летия победы</div>
+          </div>
+          <div class="location-placeholder" id="locationPlaceholder" style="display: none;">
+            локация будет определена вместе с анонсом следующей сходки
           </div>
         </div>
 
         <!-- 3 Раздельные плашки: qualbyy (администратор), florned (организатор), хаб сходок мск -->
-        <div class="contact-row-triplet">
+        <div class="contact-row-triplet" id="contactsTriplet">
           <!-- Плашка qualbyy -->
           <div class="contact-card-sep">
             <span class="contact-tag">администратор</span>
@@ -916,8 +1282,16 @@
 
     <!-- Нижняя полоса окна -->
     <div class="window-bottom">
-      <a class="contact-link" href="https://t.me/mskmeethub" target="_blank" rel="noopener">t.me/mskmeethub</a>
-      <span id="winFooterText">разработано <a class="contact-link" href="https://qualbyy.github.io" target="_blank" rel="noopener">qualbyy</a> &bull; 2026</span>
+      <div class="status-switcher" id="statusSwitcher">
+        <span class="switcher-label">режим:</span>
+        <button type="button" class="switcher-btn" data-status="upcoming" onclick="setSiteStatus('upcoming')" title="Сходка запланирована">планируется</button>
+        <button type="button" class="switcher-btn active" data-status="active" onclick="setSiteStatus('active')" title="Сходка идет прямо сейчас">идет live</button>
+        <button type="button" class="switcher-btn" data-status="none" onclick="setSiteStatus('none')" title="Пока сходок не планируется">нет сходок</button>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <a class="contact-link" href="https://t.me/mskmeethub" target="_blank" rel="noopener">t.me/mskmeethub</a>
+        <span id="winFooterText">разработано <a class="contact-link" href="https://qualbyy.github.io" target="_blank" rel="noopener">qualbyy</a> &bull; 2026</span>
+      </div>
     </div>
 
   </div>
@@ -953,36 +1327,300 @@
       }
     }
 
-    // 2. Наполнение данными
+    // 2. Управление статусами и состояниями сайта
+    let currentStatus = 'upcoming';
+    let countdownInterval = null;
+    let liveElapsedInterval = null;
+    let cachedParticipants = null;
+
+    function normalizeStatus(raw) {
+      const s = String(raw || '').toLowerCase().trim();
+      if (['active', 'идет', 'live', 'сейчас', 'current', 'проходит'].includes(s)) return 'active';
+      if (['none', 'нет', 'idle', 'отменена', 'пусто', 'empty', 'ожидание'].includes(s)) return 'none';
+      return 'upcoming';
+    }
+
+    function getInitialStatus() {
+      // 1. Проверяем URL параметр (?status=active, ?status=none, ?status=upcoming)
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const urlStatus = params.get('status') || params.get('mode');
+        if (urlStatus) return normalizeStatus(urlStatus);
+      } catch (e) {}
+
+      // 2. Проверяем временный выбор в sessionStorage (при клике на переключатель)
+      try {
+        const sessionStatus = sessionStorage.getItem('meetup_status_override');
+        if (sessionStatus) return normalizeStatus(sessionStatus);
+      } catch (e) {}
+
+      // 3. Статус из meetup_data.js
+      if (typeof MEETUP_DATA !== 'undefined' && MEETUP_DATA.status) {
+        return normalizeStatus(MEETUP_DATA.status);
+      }
+
+      return 'upcoming';
+    }
+
+    // Всплывающее уведомление для удобства переключения
+    function showStatusToast(st) {
+      let toast = document.getElementById('statusToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'statusToast';
+        toast.className = 'status-toast';
+        document.body.appendChild(toast);
+      }
+      
+      const names = {
+        upcoming: 'планируется (upcoming)',
+        active: 'сходка идет live (active)',
+        none: 'пока сходок нет (none)'
+      };
+
+      toast.innerHTML = `
+        <div class="status-toast-text">
+          <strong>режим предпросмотра:</strong> ${names[st] || st}<br>
+          <span style="color:var(--text-secondary); font-size:10.5px;">
+            для сохранения на сайте укажите <code>status: "${st}"</code> в <code>meetup_data.js</code>
+          </span>
+        </div>
+        <span class="status-toast-close" onclick="this.parentElement.classList.remove('visible')">&times;</span>
+      `;
+      toast.classList.add('visible');
+
+      clearTimeout(window._toastTimeout);
+      window._toastTimeout = setTimeout(() => {
+        toast.classList.remove('visible');
+      }, 5500);
+    }
+
+    // Переключение статуса пользователем
+    window.setSiteStatus = function(newStatus, isUserAction = true) {
+      currentStatus = normalizeStatus(newStatus);
+      if (isUserAction) {
+        try {
+          sessionStorage.setItem('meetup_status_override', currentStatus);
+        } catch (e) {}
+        showStatusToast(currentStatus);
+      }
+      updateSwitcherUI();
+      renderData();
+    };
+
+    function updateSwitcherUI() {
+      document.querySelectorAll('.switcher-btn').forEach(btn => {
+        const btnSt = btn.getAttribute('data-status');
+        btn.classList.toggle('active', btnSt === currentStatus);
+      });
+    }
+
+    // Вспомогательная функция формата: ник (@тег)
+    function formatParticipantName(p, withLink = false) {
+      if (!p) return '';
+      if (typeof p === 'string') return p;
+      const name = p.name || 'аноним';
+      if (!p.tag) return name;
+      const tag = p.tag.startsWith('@') ? p.tag : `@${p.tag}`;
+      const cleanUser = tag.replace(/^@/, '');
+      if (withLink && cleanUser) {
+        return `${name} (<a href="https://t.me/${cleanUser}" target="_blank" rel="noopener noreferrer" class="contact-link" style="font-size:inherit;">${tag}</a>)`;
+      }
+      return `${name} (${tag})`;
+    }
+
+    // 3. Наполнение данными всех состояний
     function renderData() {
       if (typeof MEETUP_DATA === 'undefined') return;
 
-      if (MEETUP_DATA.title) document.getElementById('eventTitle').textContent = MEETUP_DATA.title;
-      if (MEETUP_DATA.dateText && MEETUP_DATA.timeText) {
-        document.getElementById('eventDate').textContent = `в ${MEETUP_DATA.dateText} в ${MEETUP_DATA.timeText}`;
-      }
+      const st = currentStatus;
+      const data = MEETUP_DATA;
+      const statusData = (data[st] && typeof data[st] === 'object') ? data[st] : {};
 
-      // Вспомогательная функция формата: ник (@тег)
-      function formatParticipantName(p, withLink = false) {
-        if (!p) return '';
-        if (typeof p === 'string') return p;
-        const name = p.name || 'аноним';
-        if (!p.tag) return name;
-        const tag = p.tag.startsWith('@') ? p.tag : `@${p.tag}`;
-        const cleanUser = tag.replace(/^@/, '');
-        if (withLink && cleanUser) {
-          return `${name} (<a href="https://t.me/${cleanUser}" target="_blank" rel="noopener noreferrer" class="contact-link" style="font-size:inherit;">${tag}</a>)`;
+      // 1. Бейдж статуса в мета-строке
+      const badgeEl = document.getElementById('statusBadge');
+      const badgeTextEl = document.getElementById('statusBadgeText');
+      if (badgeEl && badgeTextEl) {
+        badgeEl.className = 'status-badge status-' + st;
+        if (st === 'active') {
+          badgeTextEl.textContent = statusData.badge || 'сходка идет сейчас';
+        } else if (st === 'none') {
+          badgeTextEl.textContent = statusData.badge || 'пока сходок нет';
+        } else {
+          badgeTextEl.textContent = statusData.badge || 'сходка запланирована';
         }
-        return `${name} (${tag})`;
       }
 
-      // Отрисовка списка участников
-      function renderParticipants(list) {
-        const participants = list || (typeof MEETUP_DATA !== 'undefined' ? MEETUP_DATA.participants : []) || [];
+      // 2. Вкладка окна браузера
+      const mainTabSpan = document.querySelector('.browser-tab[data-tab="tab-overview"] span');
+      if (mainTabSpan) {
+        if (st === 'active') mainTabSpan.textContent = 'сходка • live';
+        else if (st === 'none') mainTabSpan.textContent = 'хаб сходок';
+        else mainTabSpan.textContent = 'сходка';
+      }
 
-        // Плашка участников под таймером (компактный список с точками-разделителями)
-        const pillsContainer = document.getElementById('pillsBarContainer');
+      // 3. Заголовок и подзаголовок даты
+      const titleEl = document.getElementById('eventTitle');
+      const dateEl = document.getElementById('eventDate');
+
+      if (titleEl) {
+        if (st === 'active') {
+          titleEl.textContent = statusData.title || 'сходка московских гдшеров идет прямо сейчас!';
+        } else if (st === 'none') {
+          titleEl.textContent = statusData.title || 'следующая сходка пока не назначена';
+        } else {
+          titleEl.textContent = statusData.title || data.title || 'следущая сходка московских гдшеров проходит...';
+        }
+      }
+
+      if (dateEl) {
+        if (st === 'active') {
+          dateEl.textContent = statusData.startedText || `сходка началась сегодня в ${statusData.timeText || data.timeText || '14:00'}`;
+        } else if (st === 'none') {
+          dateEl.textContent = statusData.dateText || 'дата и время определятся позже';
+        } else {
+          const dt = statusData.dateText || data.dateText;
+          const tm = statusData.timeText || data.timeText;
+          dateEl.textContent = (dt && tm) ? `в ${dt} в ${tm}` : (dt || '');
+        }
+      }
+
+      // 4. Переключение центральных блоков: Upcoming / Active / None
+      const secUpcoming = document.getElementById('stateUpcomingSection');
+      const secActive = document.getElementById('stateActiveSection');
+      const secNone = document.getElementById('stateNoneSection');
+
+      if (secUpcoming) secUpcoming.style.display = (st === 'upcoming') ? 'flex' : 'none';
+      if (secActive) secActive.style.display = (st === 'active') ? 'flex' : 'none';
+      if (secNone) secNone.style.display = (st === 'none') ? 'flex' : 'none';
+
+      // 4.1. Наполнение состояния ACTIVE (Live)
+      if (st === 'active' && secActive) {
+        const liveTitle = document.getElementById('liveTitle');
+        const liveDesc = document.getElementById('liveDesc');
+        const liveChatBtn = document.getElementById('liveChatBtn');
+        if (liveTitle) liveTitle.textContent = statusData.liveBannerTitle || 'встреча в самом разгаре!';
+        if (liveDesc) liveDesc.textContent = statusData.liveBannerText || 'мы уже собрались на месте встречи. присоединяйтесь к нам на локации или напишите организаторам, если не можете нас найти.';
+        if (liveChatBtn) {
+          liveChatBtn.textContent = statusData.chatButtonText || 'написать в чат сообщества →';
+          liveChatBtn.href = statusData.chatButtonUrl || data.communityUrl || 'https://t.me/mskmeethub';
+        }
+        updateLiveTimer(statusData.targetTime || data.targetTime);
+      } else {
+        if (liveElapsedInterval) clearInterval(liveElapsedInterval);
+      }
+
+      // 4.2. Наполнение состояния NONE (Ожидание)
+      if (st === 'none' && secNone) {
+        const noneTitle = document.getElementById('noneTitle');
+        const noneDesc = document.getElementById('noneDesc');
+        const noneBtn = document.getElementById('noneActionBtn');
+        if (noneTitle) noneTitle.textContent = statusData.placeholderTitle || 'активных анонсов пока нет';
+        if (noneDesc) noneDesc.textContent = statusData.placeholderText || 'мы готовим следующую встречу. любой желающий может предложить сходку: если дата и место наберут 6+ голосов в чате, мы объявим её официально!';
+        if (noneBtn) {
+          noneBtn.textContent = statusData.buttonText || 'предложить сходку в telegram →';
+          noneBtn.href = statusData.buttonUrl || data.communityUrl || 'https://t.me/mskmeethub';
+        }
+      }
+
+      // 4.3. Наполнение состояния UPCOMING (Таймер)
+      if (st === 'upcoming') {
+        const targetTimeStr = statusData.targetTime || data.targetTime;
+        startCountdownTimer(targetTimeStr);
+      } else {
+        if (countdownInterval) clearInterval(countdownInterval);
+      }
+
+      // 5. Отрисовка локации
+      renderLocation(st, statusData, data);
+
+      // 6. Отрисовка участников
+      renderParticipants(cachedParticipants || data.participants, st);
+
+      // 7. Отрисовка контактов
+      renderContacts(data.contacts, st);
+
+      // 8. Отрисовка правил и информации
+      renderInfoSections(data.infoSections, data.notes);
+    }
+
+    // Отрисовка локации
+    function renderLocation(st, statusData, rootData) {
+      const locBar = document.getElementById('locationBar');
+      const locContent = document.getElementById('locationContent');
+      const locPlaceholder = document.getElementById('locationPlaceholder');
+      const locLabel = document.getElementById('locationLabel');
+      const placeEl = document.getElementById('locationPlace');
+      const metroTag = document.getElementById('locationMetroTag');
+      const metroCircle = document.getElementById('locationMetroCircle');
+      const metroName = document.getElementById('locationMetroName');
+      const descEl = document.getElementById('locationDesc');
+
+      if (!locBar) return;
+
+      locBar.classList.toggle('is-active-meetup', st === 'active');
+
+      if (st === 'none') {
+        if (locLabel) locLabel.textContent = 'локация:';
+        if (locContent) locContent.style.display = 'none';
+        if (locPlaceholder) {
+          locPlaceholder.style.display = 'block';
+          locPlaceholder.textContent = statusData.locationNotice || 'локация будет объявлена вместе с анонсом следующей сходки';
+        }
+        return;
+      }
+
+      if (locPlaceholder) locPlaceholder.style.display = 'none';
+      if (locContent) locContent.style.display = 'flex';
+
+      const loc = statusData.location || rootData.location || {};
+      if (locLabel) {
+        if (st === 'active') {
+          locLabel.innerHTML = 'точка сбора: <span class="location-live-badge">мы здесь</span>';
+        } else {
+          locLabel.textContent = 'локация:';
+        }
+      }
+
+      if (placeEl) placeEl.textContent = loc.place || 'локация уточняется';
+      if (descEl) descEl.textContent = loc.description || '';
+
+      if (loc.metro && loc.metro.name) {
+        if (metroTag) metroTag.style.display = 'inline-flex';
+        if (metroName) metroName.textContent = `м. ${loc.metro.name}`;
+        if (metroCircle) {
+          metroCircle.textContent = loc.metro.line || '';
+          if (loc.metro.color) metroCircle.style.backgroundColor = loc.metro.color;
+        }
+      } else {
+        if (metroTag) metroTag.style.display = 'none';
+      }
+    }
+
+    // Отрисовка участников
+    function renderParticipants(list, st = currentStatus) {
+      const participants = list || (typeof MEETUP_DATA !== 'undefined' ? MEETUP_DATA.participants : []) || [];
+      cachedParticipants = participants;
+
+      const pillsContainer = document.getElementById('pillsBarContainer');
+      const pillsPlaceholder = document.getElementById('participantsPlaceholder');
+      const barLabel = document.getElementById('participantsBarLabel');
+
+      if (barLabel) {
+        if (st === 'active') barLabel.textContent = 'на сходке:';
+        else barLabel.textContent = 'участники:';
+      }
+
+      if (st === 'none') {
+        if (pillsContainer) pillsContainer.style.display = 'none';
+        if (pillsPlaceholder) {
+          pillsPlaceholder.style.display = 'block';
+          pillsPlaceholder.textContent = 'запись откроется после официального анонса даты в нашей telegram-группе';
+        }
+      } else {
+        if (pillsPlaceholder) pillsPlaceholder.style.display = 'none';
         if (pillsContainer) {
+          pillsContainer.style.display = 'flex';
           pillsContainer.innerHTML = '';
           participants.forEach((p, idx) => {
             if (idx > 0) {
@@ -1011,11 +1649,23 @@
           moreLink.onclick = () => switchTab('tab-participants', null);
           pillsContainer.appendChild(moreLink);
         }
+      }
 
-        // Таблица участников (вкладка 2)
-        const pBody = document.getElementById('participantsTableBody');
-        if (pBody) {
-          pBody.innerHTML = '';
+      // Таблица участников (вкладка 2)
+      const pBody = document.getElementById('participantsTableBody');
+      if (pBody) {
+        pBody.innerHTML = '';
+        if (st === 'none') {
+          const tr = document.createElement('tr');
+          const groupUrl = (typeof MEETUP_DATA !== 'undefined' && MEETUP_DATA.communityUrl) || 'https://t.me/mskmeethub';
+          tr.innerHTML = `
+            <td colspan="3" style="text-align: center; padding: 26px 14px; color: var(--text-tertiary); font-style: italic; font-family: var(--font-serif); line-height: 1.5;">
+              на данный момент активных сходок нет, поэтому запись закрыта.<br>
+              следите за анонсами и опросами в нашей <a class="contact-link" href="${groupUrl}" target="_blank" rel="noopener">telegram-группе</a>.
+            </td>
+          `;
+          pBody.appendChild(tr);
+        } else {
           participants.forEach((p, idx) => {
             const tr = document.createElement('tr');
             const display = formatParticipantName(p, true);
@@ -1028,32 +1678,49 @@
           });
         }
       }
+    }
 
-      renderParticipants(MEETUP_DATA.participants);
+    // Отрисовка контактов
+    function renderContacts(contactsList, st = currentStatus) {
+      const container = document.getElementById('contactsTriplet');
+      if (!container) return;
+      
+      const contacts = contactsList || (typeof MEETUP_DATA !== 'undefined' ? MEETUP_DATA.contacts : []) || [];
+      if (!contacts.length) return;
 
-      // Загрузка свежего списка участников из базы бота в обход кэша
-      fetch('./participants.json?t=' + Date.now(), { cache: 'no-store' })
-        .then(res => {
-          if (!res.ok) throw new Error('Status ' + res.status);
-          return res.json();
-        })
-        .then(data => {
-          if (Array.isArray(data) && data.length > 0) {
-            renderParticipants(data);
-          }
-        })
-        .catch(err => {
-          console.log('Используется встроенный список участников:', err);
-        });
+      container.innerHTML = '';
+      contacts.forEach(c => {
+        const card = document.createElement('div');
+        card.className = 'contact-card-sep';
+        
+        let role = c.role || 'контакт';
+        if (st === 'active' && (role === 'администратор' || role === 'организатор')) {
+          role += ' • на связи';
+        }
 
-      // Информация и правила (вкладка 3)
+        const tag = c.tag || '';
+        const url = c.url || (tag ? `https://t.me/${tag.replace(/^@/, '')}` : '#');
+        const arrow = (c.role === 'координация' || !c.role) ? ' &rarr;' : '';
+
+        card.innerHTML = `
+          <span class="contact-tag">${role}</span>
+          <span class="contact-name">${c.name || 'организатор'}</span>
+          <a class="contact-link" href="${url}" target="_blank" rel="noopener">${tag}${arrow}</a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Отрисовка правил и информации
+    function renderInfoSections(infoSections, notes) {
       const infoContainer = document.getElementById('infoSectionsContainer');
+      if (!infoContainer) return;
       infoContainer.innerHTML = '';
 
-      const sections = MEETUP_DATA.infoSections || [
+      const sections = infoSections || [
         {
           title: "краткий свод правил на сходке",
-          items: MEETUP_DATA.notes || []
+          items: notes || []
         }
       ];
 
@@ -1079,19 +1746,25 @@
       });
     }
 
-    // 3. Обратный отсчет таймера
-    function startTimer() {
-      if (typeof MEETUP_DATA === 'undefined' || !MEETUP_DATA.targetTime) return;
-      const target = new Date(MEETUP_DATA.targetTime).getTime();
+    // Таймер обратного отсчета для UPCOMING
+    function startCountdownTimer(targetTimeStr) {
+      if (countdownInterval) clearInterval(countdownInterval);
+      if (!targetTimeStr) return;
+
+      const target = new Date(targetTimeStr).getTime();
 
       function tick() {
         const diff = target - new Date().getTime();
 
         if (diff <= 0) {
-          document.getElementById('cnt-days').textContent = '00';
-          document.getElementById('cnt-hours').textContent = '00';
-          document.getElementById('cnt-mins').textContent = '00';
-          document.getElementById('cnt-secs').textContent = '00';
+          const cd = document.getElementById('cnt-days');
+          const ch = document.getElementById('cnt-hours');
+          const cm = document.getElementById('cnt-mins');
+          const cs = document.getElementById('cnt-secs');
+          if (cd) cd.textContent = '00';
+          if (ch) ch.textContent = '00';
+          if (cm) cm.textContent = '00';
+          if (cs) cs.textContent = '00';
           return;
         }
 
@@ -1100,14 +1773,47 @@
         const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const s = Math.floor((diff % (1000 * 60)) / 1000);
 
-        document.getElementById('cnt-days').textContent = String(d).padStart(2, '0');
-        document.getElementById('cnt-hours').textContent = String(h).padStart(2, '0');
-        document.getElementById('cnt-mins').textContent = String(m).padStart(2, '0');
-        document.getElementById('cnt-secs').textContent = String(s).padStart(2, '0');
+        const cd = document.getElementById('cnt-days');
+        const ch = document.getElementById('cnt-hours');
+        const cm = document.getElementById('cnt-mins');
+        const cs = document.getElementById('cnt-secs');
+        if (cd) cd.textContent = String(d).padStart(2, '0');
+        if (ch) ch.textContent = String(h).padStart(2, '0');
+        if (cm) cm.textContent = String(m).padStart(2, '0');
+        if (cs) cs.textContent = String(s).padStart(2, '0');
       }
 
       tick();
-      setInterval(tick, 1000);
+      countdownInterval = setInterval(tick, 1000);
+    }
+
+    // Счетчик продолжительности встречи для ACTIVE (Live)
+    function updateLiveTimer(targetTimeStr) {
+      if (liveElapsedInterval) clearInterval(liveElapsedInterval);
+      const liveElapsedEl = document.getElementById('liveElapsedText');
+      if (!liveElapsedEl) return;
+
+      function tickLive() {
+        if (!targetTimeStr) {
+          liveElapsedEl.textContent = 'встреча в самом разгаре';
+          return;
+        }
+        const diff = new Date().getTime() - new Date(targetTimeStr).getTime();
+        if (diff > 0) {
+          const h = Math.floor(diff / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          if (h > 0) {
+            liveElapsedEl.textContent = `продолжается уже: ${h} ч ${m} мин`;
+          } else {
+            liveElapsedEl.textContent = `продолжается уже: ${m} мин`;
+          }
+        } else {
+          liveElapsedEl.textContent = 'начинается с минуты на минуту';
+        }
+      }
+
+      tickLive();
+      liveElapsedInterval = setInterval(tickLive, 30000);
     }
 
     // 4. Позиционирование и перемещение окна на ПК
@@ -1157,14 +1863,27 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       try {
+        currentStatus = getInitialStatus();
+        updateSwitcherUI();
         renderData();
+
+        // Загрузка свежего списка участников из базы бота в обход кэша
+        fetch('./participants.json?t=' + Date.now(), { cache: 'no-store' })
+          .then(res => {
+            if (!res.ok) throw new Error('Status ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            if (Array.isArray(data) && data.length > 0) {
+              cachedParticipants = data;
+              renderParticipants(data, currentStatus);
+            }
+          })
+          .catch(err => {
+            console.log('Используется встроенный список участников:', err);
+          });
       } catch (err) {
-        console.error('Ошибка рендеринга:', err);
-      }
-      try {
-        startTimer();
-      } catch (err) {
-        console.error('Ошибка таймера:', err);
+        console.error('Ошибка инициализации:', err);
       }
       centerWindow();
     });
