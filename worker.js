@@ -172,8 +172,9 @@ async function handleRegister(token, githubToken, chatId, user, msgId) {
   try {
     const rawData = await fetchGitHubFile(githubToken, "meetup_data.js");
     if (rawData) {
-      const match = rawData.match(/status:\s*["']([^"']+)["']/);
-      if (match && ["none", "нет", "idle"].includes(match[1].toLowerCase().trim())) {
+      const match = rawData.match(/MEETUP_DATA\s*=\s*\{[\s\S]*?status:\s*["']([^"']+)["']/);
+      const status = match ? match[1].toLowerCase().trim() : "";
+      if (["none", "нет", "idle"].includes(status)) {
         await sendMessage(
           token,
           chatId,
