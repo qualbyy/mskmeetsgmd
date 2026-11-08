@@ -329,17 +329,19 @@
     }
 
     .pulse-dot {
-      width: 6.5px;
-      height: 6.5px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       display: inline-block;
       flex-shrink: 0;
+      background-color: var(--accent);
     }
 
+    .live-indicator .pulse-dot,
     .status-active .pulse-dot {
-      background-color: #9b1c20;
-      box-shadow: 0 0 0 0 rgba(155, 28, 32, 0.65);
-      animation: pulseLive 1.6s infinite cubic-bezier(0.4, 0, 0.6, 1);
+      background-color: #d32027;
+      box-shadow: 0 0 0 0 rgba(211, 32, 39, 0.7);
+      animation: pulseLive 1.4s infinite cubic-bezier(0.4, 0, 0.6, 1);
     }
 
     .status-upcoming .pulse-dot {
@@ -352,15 +354,15 @@
 
     @keyframes pulseLive {
       0% {
-        box-shadow: 0 0 0 0 rgba(155, 28, 32, 0.65);
+        box-shadow: 0 0 0 0 rgba(211, 32, 39, 0.7);
         transform: scale(0.95);
       }
       70% {
-        box-shadow: 0 0 0 6px rgba(155, 28, 32, 0);
-        transform: scale(1.05);
+        box-shadow: 0 0 0 7px rgba(211, 32, 39, 0);
+        transform: scale(1.1);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(155, 28, 32, 0);
+        box-shadow: 0 0 0 0 rgba(211, 32, 39, 0);
         transform: scale(0.95);
       }
     }
@@ -866,101 +868,10 @@
       padding: 6px 14px;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       font-family: var(--font-mono);
       font-size: 10.5px;
       color: var(--text-tertiary);
       text-transform: lowercase;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    /* Переключатель статусов в футере */
-    .status-switcher {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-family: var(--font-mono);
-      font-size: 10.5px;
-    }
-
-    .switcher-label {
-      color: var(--text-tertiary);
-      margin-right: 2px;
-      text-transform: lowercase;
-    }
-
-    .switcher-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      border-radius: 4px;
-      padding: 2px 7px;
-      font-size: 10.5px;
-      font-family: inherit;
-      cursor: pointer;
-      text-transform: lowercase;
-      transition: all 0.15s ease;
-      line-height: 1.3;
-    }
-
-    .switcher-btn:hover {
-      background: var(--card-bg);
-      color: var(--text-main);
-      border-color: var(--border-dark);
-    }
-
-    .switcher-btn.active {
-      background: var(--accent);
-      color: #ffffff;
-      border-color: var(--accent);
-      font-weight: 500;
-    }
-
-    /* Всплывающая плашка-подсказка при переключении */
-    .status-toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--window-bg);
-      border: 1px solid var(--border-dark);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 30px rgba(60, 24, 28, 0.15);
-      padding: 10px 16px;
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 99999;
-      max-width: 90vw;
-      text-align: left;
-    }
-
-    .status-toast.visible {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-      pointer-events: auto;
-    }
-
-    .status-toast-text code {
-      background: var(--pill-bg);
-      padding: 1px 5px;
-      border-radius: 3px;
-      color: var(--accent);
-      font-size: 11px;
-    }
-
-    .status-toast-close {
-      cursor: pointer;
-      color: var(--text-tertiary);
-      font-size: 14px;
-      line-height: 1;
     }
 
     /* Мобильная адаптация */
@@ -998,17 +909,6 @@
 
       .contact-row-triplet {
         grid-template-columns: 1fr;
-      }
-
-      .window-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .status-switcher {
-        width: 100%;
-        justify-content: flex-start;
       }
     }
 
@@ -1282,16 +1182,8 @@
 
     <!-- Нижняя полоса окна -->
     <div class="window-bottom">
-      <div class="status-switcher" id="statusSwitcher">
-        <span class="switcher-label">режим:</span>
-        <button type="button" class="switcher-btn" data-status="upcoming" onclick="setSiteStatus('upcoming')" title="Сходка запланирована">планируется</button>
-        <button type="button" class="switcher-btn active" data-status="active" onclick="setSiteStatus('active')" title="Сходка идет прямо сейчас">идет live</button>
-        <button type="button" class="switcher-btn" data-status="none" onclick="setSiteStatus('none')" title="Пока сходок не планируется">нет сходок</button>
-      </div>
-      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-        <a class="contact-link" href="https://t.me/mskmeethub" target="_blank" rel="noopener">t.me/mskmeethub</a>
-        <span id="winFooterText">разработано <a class="contact-link" href="https://qualbyy.github.io" target="_blank" rel="noopener">qualbyy</a> &bull; 2026</span>
-      </div>
+      <a class="contact-link" href="https://t.me/mskmeethub" target="_blank" rel="noopener">t.me/mskmeethub</a>
+      <span id="winFooterText">разработано <a class="contact-link" href="https://qualbyy.github.io" target="_blank" rel="noopener">qualbyy</a> &bull; 2026</span>
     </div>
 
   </div>
@@ -1348,13 +1240,7 @@
         if (urlStatus) return normalizeStatus(urlStatus);
       } catch (e) {}
 
-      // 2. Проверяем временный выбор в sessionStorage (при клике на переключатель)
-      try {
-        const sessionStatus = sessionStorage.getItem('meetup_status_override');
-        if (sessionStatus) return normalizeStatus(sessionStatus);
-      } catch (e) {}
-
-      // 3. Статус из meetup_data.js
+      // 2. Статус из meetup_data.js
       if (typeof MEETUP_DATA !== 'undefined' && MEETUP_DATA.status) {
         return normalizeStatus(MEETUP_DATA.status);
       }
@@ -1362,58 +1248,11 @@
       return 'upcoming';
     }
 
-    // Всплывающее уведомление для удобства переключения
-    function showStatusToast(st) {
-      let toast = document.getElementById('statusToast');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'statusToast';
-        toast.className = 'status-toast';
-        document.body.appendChild(toast);
-      }
-      
-      const names = {
-        upcoming: 'планируется (upcoming)',
-        active: 'сходка идет live (active)',
-        none: 'пока сходок нет (none)'
-      };
-
-      toast.innerHTML = `
-        <div class="status-toast-text">
-          <strong>режим предпросмотра:</strong> ${names[st] || st}<br>
-          <span style="color:var(--text-secondary); font-size:10.5px;">
-            для сохранения на сайте укажите <code>status: "${st}"</code> в <code>meetup_data.js</code>
-          </span>
-        </div>
-        <span class="status-toast-close" onclick="this.parentElement.classList.remove('visible')">&times;</span>
-      `;
-      toast.classList.add('visible');
-
-      clearTimeout(window._toastTimeout);
-      window._toastTimeout = setTimeout(() => {
-        toast.classList.remove('visible');
-      }, 5500);
-    }
-
-    // Переключение статуса пользователем
-    window.setSiteStatus = function(newStatus, isUserAction = true) {
+    // Программное переключение статуса (из консоли или при необходимости)
+    window.setSiteStatus = function(newStatus) {
       currentStatus = normalizeStatus(newStatus);
-      if (isUserAction) {
-        try {
-          sessionStorage.setItem('meetup_status_override', currentStatus);
-        } catch (e) {}
-        showStatusToast(currentStatus);
-      }
-      updateSwitcherUI();
       renderData();
     };
-
-    function updateSwitcherUI() {
-      document.querySelectorAll('.switcher-btn').forEach(btn => {
-        const btnSt = btn.getAttribute('data-status');
-        btn.classList.toggle('active', btnSt === currentStatus);
-      });
-    }
 
     // Вспомогательная функция формата: ник (@тег)
     function formatParticipantName(p, withLink = false) {
@@ -1864,7 +1703,6 @@
     window.addEventListener('DOMContentLoaded', () => {
       try {
         currentStatus = getInitialStatus();
-        updateSwitcherUI();
         renderData();
 
         // Загрузка свежего списка участников из базы бота в обход кэша
