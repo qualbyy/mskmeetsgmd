@@ -1726,9 +1726,31 @@
       centerWindow();
     });
 
-    // 5. Пасхалка (Ctrl + Shift + Alt + A)
+    // 5. Пасхалка (двойной шифт подряд / Ctrl+Shift+Alt+A / параметр в консоли)
+    let lastShiftTime = 0;
     window.addEventListener('keydown', (e) => {
-      const isA = e.key === 'a' || e.key === 'A' || e.code === 'KeyA';
+      // 100% свободный триггер: двойное быстрое нажатие Shift (Double Shift)
+      if (e.key === 'Shift') {
+        const now = Date.now();
+        if (now - lastShiftTime < 400 && now - lastShiftTime > 40) {
+          e.preventDefault();
+          openEasterEgg();
+          lastShiftTime = 0;
+          return;
+        }
+        lastShiftTime = now;
+      }
+
+      // Альтернативный надежный хоткей: Ctrl + Alt + M (Mitino)
+      const isM = e.code === 'KeyM' || e.key === 'm' || e.key === 'M' || e.key === 'ь' || e.key === 'Ь';
+      if (e.ctrlKey && e.altKey && isM) {
+        e.preventDefault();
+        openEasterEgg();
+        return;
+      }
+
+      // Сохраняем исходный Ctrl + Shift + Alt + A для обратной совместимости
+      const isA = e.code === 'KeyA' || e.key === 'a' || e.key === 'A' || e.key === 'ф' || e.key === 'Ф';
       if (e.ctrlKey && e.shiftKey && e.altKey && isA) {
         e.preventDefault();
         openEasterEgg();
