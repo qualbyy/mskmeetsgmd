@@ -1226,7 +1226,8 @@
     }
 
     function getInitialStatus() {
-      // 1. Проверяем URL параметр (?status=active, ?status=none, ?status=upcoming)
+      // 1. Проверяем явный URL параметр (?status=active, ?status=none, ?status=upcoming)
+      // При наличии явного параметра в URL авто-переключение не применяется (режим предпросмотра)
       try {
         const params = new URLSearchParams(window.location.search);
         const urlStatus = params.get('status') || params.get('mode');
@@ -1234,11 +1235,32 @@
       } catch (e) {}
 
       // 2. Статус из meetup_data.js
+      let baseStatus = 'upcoming';
       if (typeof MEETUP_DATA !== 'undefined' && MEETUP_DATA.status) {
-        return normalizeStatus(MEETUP_DATA.status);
+        baseStatus = normalizeStatus(MEETUP_DATA.status);
       }
 
-      return 'upcoming';
+      // 3. Авто-переход по времени (если статус не "none" вручную):
+      //    - до начала: upcoming
+      //    - первые 10 часов с момента targetTime: active (Live)
+      //    - после 10 часов: none (сходка завершилась)
+      if (baseStatus !== 'none' && typeof MEETUP_DATA !== 'undefined') {
+        const targetStr = (MEETUP_DATA.upcoming && MEETUP_DATA.upcoming.targetTime) || MEETUP_DATA.targetTime;
+        if (targetStr) {
+          const targetMs = new Date(targetStr).getTime();
+          const nowMs = Date.now();
+          if (!isNaN(targetMs)) {
+            const diffHours = (nowMs - targetMs) / (1000 * 60 * 60);
+            if (diffHours >= 10) {
+              return 'none';
+            } else if (diffHours >= 0) {
+              return 'active';
+            }
+          }
+        }
+      }
+
+      return baseStatus;
     }
 
     // Программное переключение статуса (из консоли или при необходимости)
@@ -1405,7 +1427,9 @@
       if (locPlaceholder) locPlaceholder.style.display = 'none';
       if (locContent) locContent.style.display = 'flex';
 
-      const loc = statusData.location || rootData.location || {};
+      const loc = (st === 'active' && statusData.location) 
+        ? statusData.location 
+        : (statusData.location || rootData.location || (rootData.upcoming && rootData.upcoming.location) || {});
       if (locLabel) {
         if (st === 'active') {
           locLabel.innerHTML = 'точка сбора: <span class="location-live-badge">мы здесь</span>';
@@ -1443,11 +1467,15 @@
         else barLabel.textContent = 'участники:';
       }
 
+      const partsBar = document.getElementById('participantsBar');
+      if (partsBar) {
+        partsBar.style.display = (st === 'none') ? 'none' : 'flex';
+      }
+
       if (st === 'none') {
         if (pillsContainer) pillsContainer.style.display = 'none';
         if (pillsPlaceholder) {
-          pillsPlaceholder.style.display = 'block';
-          pillsPlaceholder.textContent = 'запись откроется после официального анонса даты в нашей telegram-группе';
+          pillsPlaceholder.style.display = 'none';
         }
       } else {
         if (pillsPlaceholder) pillsPlaceholder.style.display = 'none';
@@ -1492,8 +1520,16 @@
           const groupUrl = (typeof MEETUP_DATA !== 'undefined' && MEETUP_DATA.communityUrl) || 'https://t.me/mskmeethub';
           tr.innerHTML = `
             <td colspan="3" style="text-align: center; padding: 26px 14px; color: var(--text-tertiary); font-style: italic; font-family: var(--font-serif); line-height: 1.5;">
-              на данный момент активных сходок нет, поэтому запись закрыта.<br>
+              на данный момент активных сходок нет, поэтому список участников пуст.<br>
               следите за анонсами и опросами в нашей <a class="contact-link" href="${groupUrl}" target="_blank" rel="noopener">telegram-группе</a>.
+            </td>
+          `;
+          pBody.appendChild(tr);
+        } else if (!participants.length) {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td colspan="3" style="text-align: center; padding: 22px 14px; color: var(--text-tertiary); font-style: italic; font-family: var(--font-serif);">
+              список участников пока пуст. будьте первым, кто запишется!
             </td>
           `;
           pBody.appendChild(tr);
@@ -1517,7 +1553,32 @@
       const container = document.getElementById('contactsTriplet');
       if (!container) return;
       
-      const contacts = contactsList || (typeof MEETUP_DATA !== 'undefined' ? MEETUP_DATA.contacts : []) || [];
+      let contacts = contactsList || (typeof MEETUP_DATA !== 'undefined' ? MEETUP_DATA.contacts : []) || [];
+      
+      // Когда сходок нет (st === 'none'): qualbyy — просто администратор, организатор — прочерк
+      if (st === 'none') {
+        contacts = [
+          {
+            role: "администратор",
+            name: "qualbyy",
+            tag: "@qualbyy",
+            url: "https://t.me/qualbyy"
+          },
+          {
+            role: "организатор",
+            name: "—",
+            tag: "не назначен",
+            url: ""
+          },
+          {
+            role: "координация",
+            name: "хаб сходок мск",
+            tag: "@mskmeethub",
+            url: "https://t.me/mskmeethub"
+          }
+        ];
+      }
+      
       if (!contacts.length) return;
 
       container.innerHTML = '';
@@ -1526,18 +1587,25 @@
         card.className = 'contact-card-sep';
         
         let role = c.role || 'контакт';
-        if (st === 'active' && (role === 'администратор' || role === 'организатор')) {
+        // Пометка "на связи" только фактическому организатору
+        const isOrganizer = role.toLowerCase().includes('организатор');
+        if (st === 'active' && isOrganizer) {
           role += ' • на связи';
         }
 
         const tag = c.tag || '';
-        const url = c.url || (tag ? `https://t.me/${tag.replace(/^@/, '')}` : '#');
+        const hasUrl = Boolean(c.url && c.url !== '#');
+        const url = hasUrl ? c.url : (tag.startsWith('@') ? `https://t.me/${tag.replace(/^@/, '')}` : '#');
         const arrow = (c.role === 'координация' || !c.role) ? ' &rarr;' : '';
+
+        const linkHtml = hasUrl || (tag.startsWith('@'))
+          ? `<a class="contact-link" href="${url}" target="_blank" rel="noopener">${tag}${arrow}</a>`
+          : `<span class="contact-link" style="opacity: 0.6; cursor: default;">${tag}</span>`;
 
         card.innerHTML = `
           <span class="contact-tag">${role}</span>
-          <span class="contact-name">${c.name || 'организатор'}</span>
-          <a class="contact-link" href="${url}" target="_blank" rel="noopener">${tag}${arrow}</a>
+          <span class="contact-name">${c.name || '—'}</span>
+          ${linkHtml}
         `;
         container.appendChild(card);
       });
@@ -1589,14 +1657,32 @@
         const diff = target - new Date().getTime();
 
         if (diff <= 0) {
-          const cd = document.getElementById('cnt-days');
-          const ch = document.getElementById('cnt-hours');
-          const cm = document.getElementById('cnt-mins');
-          const cs = document.getElementById('cnt-secs');
-          if (cd) cd.textContent = '00';
-          if (ch) ch.textContent = '00';
-          if (cm) cm.textContent = '00';
-          if (cs) cs.textContent = '00';
+          // Если пользователь явно форсировал ?status=upcoming, не переключаем принудительно в active
+          let isForcedUpcoming = false;
+          try {
+            const params = new URLSearchParams(window.location.search);
+            const urlStatus = params.get('status') || params.get('mode');
+            if (urlStatus && normalizeStatus(urlStatus) === 'upcoming') {
+              isForcedUpcoming = true;
+            }
+          } catch (e) {}
+
+          if (isForcedUpcoming) {
+            const cd = document.getElementById('cnt-days');
+            const ch = document.getElementById('cnt-hours');
+            const cm = document.getElementById('cnt-mins');
+            const cs = document.getElementById('cnt-secs');
+            if (cd) cd.textContent = '00';
+            if (ch) ch.textContent = '00';
+            if (cm) cm.textContent = '00';
+            if (cs) cs.textContent = '00';
+            return;
+          }
+
+          // Время наступило — переключаем в live режим
+          clearInterval(countdownInterval);
+          currentStatus = 'active';
+          renderData();
           return;
         }
 

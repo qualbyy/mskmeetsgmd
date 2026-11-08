@@ -26,14 +26,14 @@ const MEETUP_DATA = {
   upcoming: {
     badge: "сходка запланирована",
     title: "следущая сходка московских гдшеров будет...",
-    dateText: "воскресенье, 8 ноября 2026",
+    dateText: "воскресенье, 15 ноября 2026",
     timeText: "14:00",
-    targetTime: "2026-11-08T14:00:00+03:00",
+    targetTime: "2026-11-15T14:00:00+03:00",
     countdownLabel: "до начала встречи осталось:",
     location: {
-      place: "трц columbus",
+      place: "ТРЦ Авиапарк",
       metro: {
-        name: "пражская",
+        name: "ЦСКА",
         line: "9",
         color: "#999999"
       },
@@ -53,9 +53,9 @@ const MEETUP_DATA = {
     chatButtonText: "написать в чат сообщества →",
     chatButtonUrl: "https://t.me/mskmeethub",
     location: {
-      place: "трц columbus (фудкорт, 3 этаж)",
+      place: "ТРЦ Авиапарк",
       metro: {
-        name: "пражская",
+        name: "ЦСКА",
         line: "9",
         color: "#999999"
       },
@@ -101,30 +101,27 @@ const MEETUP_DATA = {
   // Контакты и организаторы (карточки на главной)
   contacts: [
     {
-      role: "администратор",
-      name: "qualbyy",
-      tag: "@qualbyy",
-      url: "https://t.me/qualbyy"
+        "role": "организатор сходки",
+        "name": "TestOrg",
+        "tag": "@testorg",
+        "url": "https://t.me/testorg"
     },
     {
-      role: "координация",
-      name: "хаб сходок мск",
-      tag: "@mskmeethub",
-      url: "https://t.me/mskmeethub"
+        "role": "администратор",
+        "name": "qualbyy",
+        "tag": "@qualbyy",
+        "url": "https://t.me/qualbyy"
+    },
+    {
+        "role": "координация",
+        "name": "хаб сходок мск",
+        "tag": "@mskmeethub",
+        "url": "https://t.me/mskmeethub"
     }
-  ],
+],
 
-  // Список участников по умолчанию
-  participants: [
-    { name: "qualbyy", tag: "@qualbyy", status: "организатор" },
-    { name: "florned", tag: "@Aiuey", status: "участник" },
-    { name: "cobw3bsss?¿", tag: "@cobwie", status: "участник" },
-    { name: "_ⷱ_ⷪ_ⷬ_ⷮ__ⷭ__ⷠ_ⷪ_ⷨ_ⷠ_ⷪ_ꙵ", tag: "@Ideotecwrld", status: "участник" },
-    { name: "︎ ︎", tag: "@mortuaryboy", status: "участник" },
-    { name: "Klacken", tag: "@Ardamor_r", status: "участник" },
-    { name: "Doctor_Execution", tag: "@Doctor_Arbuzek", status: "участник" },
-    { name: "𝙲𝚊𝚝𝚙𝚑𝚢𝚢𝚢𝚢𝚢", tag: "@qwertyadqwe", status: "участник" }
-  ],
+  // Список участников по умолчанию (пуст, когда сходка не объявлена)
+  participants: [],
 
   participantsNote: "запись на сходку происходит в нашей telegram-группе",
   communityUrl: "https://t.me/mskmeethub",
