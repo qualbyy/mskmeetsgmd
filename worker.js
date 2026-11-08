@@ -178,7 +178,7 @@ async function handleRegister(token, githubToken, chatId, user, msgId) {
         await sendMessage(
           token,
           chatId,
-          "Сейчас активных сходок не запланировано, поэтому запись закрыта.\nСледите за анонсами и опросами в группе: https://t.me/mskmeethub",
+          "Сейчас активных сходок не запланировано, поэтому запись закрыта.\nСледите за анонсами и опросами в чате.",
           msgId
         );
         return;
@@ -294,7 +294,7 @@ async function handleList(token, githubToken, chatId, msgId) {
 
 // Обработка /help
 async function handleHelp(token, chatId, allowedChat, msgId) {
-  const text = `Бот сходки @${allowedChat}\n\nКоманды в чате:\n/register — записаться на сходку\n/unregister — отменить свою запись\n/participants — посмотреть список участников\n\nСайт сходки: ${DEFAULT_CONFIG.SITE_URL}`;
+  const text = `Бот для записи на сходку\n\nКоманды в чате:\n/register — записаться на сходку\n/unregister — отменить свою запись\n/participants — посмотреть список участников\n\nСайт сходки: ${DEFAULT_CONFIG.SITE_URL}`;
   await sendMessage(token, chatId, text, msgId);
 }
 

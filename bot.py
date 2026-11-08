@@ -124,7 +124,7 @@ def handle_register(chat_id, user, msg_id):
     if current_st in ["none", "нет", "idle"]:
         text = (
             "Сейчас активных сходок не запланировано, поэтому запись закрыта.\n"
-            "Следите за анонсами и опросами в группе: https://t.me/mskmeethub"
+            "Следите за анонсами и опросами в чате."
         )
         send_message(chat_id, text, reply_to_message_id=msg_id)
         return
@@ -221,7 +221,7 @@ def handle_list(chat_id, msg_id):
 
 def handle_help(chat_id, msg_id):
     text = (
-        "Бот сходки @mskmeethub\n\n"
+        "Бот для записи на сходку\n\n"
         "Команды в чате:\n"
         "/register — записаться на сходку\n"
         "/unregister — отменить свою запись\n"
