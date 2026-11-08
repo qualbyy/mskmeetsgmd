@@ -975,7 +975,66 @@
       font-family: var(--font-serif);
       font-style: italic;
     }
+
+    /* Мгновенная раскладка состояний до первого рендера страницы (защита от FOUC/мигания) */
+    #stateUpcomingSection,
+    #stateActiveSection,
+    #stateNoneSection {
+      display: none;
+    }
+
+    html[data-status="upcoming"] #stateUpcomingSection {
+      display: flex !important;
+    }
+    html[data-status="active"] #stateActiveSection {
+      display: flex !important;
+    }
+    html[data-status="none"] #stateNoneSection {
+      display: flex !important;
+    }
   </style>
+
+  <!-- Загружаем конфигурацию в head для мгновенного применения статуса до парсинга DOM -->
+  <script src="meetup_data.js"></script>
+  <script>
+    function normalizeMeetupStatus(raw) {
+      var s = String(raw || '').toLowerCase().trim();
+      if (['active', 'идет', 'live', 'сейчас', 'current', 'проходит'].indexOf(s) !== -1) return 'active';
+      if (['none', 'нет', 'idle', 'отменена', 'пусто', 'empty', 'ожидание'].indexOf(s) !== -1) return 'none';
+      return 'upcoming';
+    }
+
+    function detectInitialStatus() {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var urlStatus = params.get('status') || params.get('mode');
+        if (urlStatus) return normalizeMeetupStatus(urlStatus);
+      } catch (e) {}
+
+      var baseStatus = 'upcoming';
+      if (typeof MEETUP_DATA !== 'undefined' && MEETUP_DATA.status) {
+        baseStatus = normalizeMeetupStatus(MEETUP_DATA.status);
+      }
+
+      if (baseStatus !== 'none' && typeof MEETUP_DATA !== 'undefined') {
+        var targetStr = (MEETUP_DATA.upcoming && MEETUP_DATA.upcoming.targetTime) || MEETUP_DATA.targetTime;
+        if (targetStr) {
+          var targetMs = new Date(targetStr).getTime();
+          var nowMs = Date.now();
+          if (!isNaN(targetMs)) {
+            var diffHours = (nowMs - targetMs) / (1000 * 60 * 60);
+            if (diffHours >= 10) return 'none';
+            else if (diffHours >= 0) return 'active';
+          }
+        }
+      }
+      return baseStatus;
+    }
+
+    try {
+      document.documentElement.setAttribute('data-status', detectInitialStatus());
+    } catch (e) {}
+  </script>
 </head>
 <body>
 
@@ -1031,19 +1090,19 @@
         <div class="main-meta">
           <div class="meta-sub">
             <span id="cityText">москва</span> &bull; <span class="meta-sub-accent" id="eventTypeText">сходка</span>
-            <span class="status-badge status-active" id="statusBadge">
+            <span class="status-badge" id="statusBadge">
               <span class="pulse-dot"></span>
-              <span id="statusBadgeText">сходка идет сейчас</span>
+              <span id="statusBadgeText"></span>
             </span>
           </div>
-          <h1 class="main-title" id="eventTitle">следущая сходка московских гдшеров будет...</h1>
-          <div class="main-date" id="eventDate">в воскресенье, 8 ноября 2026 в 14:00</div>
+          <h1 class="main-title" id="eventTitle"></h1>
+          <div class="main-date" id="eventDate"></div>
         </div>
 
         <!-- Центральный блок состояний: Таймер / Live / Режим ожидания -->
         <div class="state-container">
           <!-- 1. Состояние: сходка запланирована (Таймер) -->
-          <div class="countdown-section" id="stateUpcomingSection">
+          <div class="countdown-section" id="stateUpcomingSection" style="display: none;">
             <div class="countdown-label" id="countdownLabel">до начала встречи осталось:</div>
             <div class="countdown-grid">
               <div class="countdown-col">
@@ -1112,13 +1171,13 @@
           <span class="location-bar-label" id="locationLabel">локация:</span>
           <div class="location-content" id="locationContent">
             <div class="location-main">
-              <span class="point-title" id="locationPlace">трц columbus</span>
-              <span class="metro-tag" id="locationMetroTag">
-                <span class="metro-circle" id="locationMetroCircle">9</span>
-                <span id="locationMetroName">м. пражская</span>
+              <span class="point-title" id="locationPlace"></span>
+              <span class="metro-tag" id="locationMetroTag" style="display: none;">
+                <span class="metro-circle" id="locationMetroCircle"></span>
+                <span id="locationMetroName"></span>
               </span>
             </div>
-            <div class="location-desc" id="locationDesc">встреча на фудкорте, а после прогулка в Парке 30-ти летия победы</div>
+            <div class="location-desc" id="locationDesc"></div>
           </div>
           <div class="location-placeholder" id="locationPlaceholder" style="display: none;">
             локация будет определена вместе с анонсом следующей сходки
@@ -1180,9 +1239,6 @@
     </div>
 
   </div>
-
-  <!-- Подключение конфигурации -->
-  <script src="meetup_data.js"></script>
 
   <script>
     // 1. Плавное переключение вкладок браузера
@@ -1266,6 +1322,7 @@
     // Программное переключение статуса (из консоли или при необходимости)
     window.setSiteStatus = function(newStatus) {
       currentStatus = normalizeStatus(newStatus);
+      document.documentElement.setAttribute('data-status', currentStatus);
       renderData();
     };
 
@@ -1288,6 +1345,7 @@
       if (typeof MEETUP_DATA === 'undefined') return;
 
       const st = currentStatus;
+      document.documentElement.setAttribute('data-status', st);
       const data = MEETUP_DATA;
       const statusData = (data[st] && typeof data[st] === 'object') ? data[st] : {};
 
@@ -1398,6 +1456,43 @@
       renderInfoSections(data.infoSections, data.notes);
     }
 
+    // Карта официальных цветов линий Московского Метро
+    const MOSCOW_METRO_COLORS = {
+      '1': '#EF1E25',   // Сокольническая (красная)
+      '2': '#2DBE2C',   // Замоскворецкая (зеленая)
+      '3': '#0078BF',   // Арбатско-Покровская (синяя)
+      '4': '#00BFFF',   // Филевская (голубая)
+      '4а': '#00BFFF',  // Филевская ветка
+      '5': '#8D5B2D',   // Кольцевая (коричневая)
+      '6': '#ED9121',   // Калужско-Рижская (оранжевая)
+      '7': '#800080',   // Таганско-Краснопресненская (фиолетовая)
+      '8': '#FFD702',   // Калининская (желтая)
+      '8а': '#FFD702',  // Солнцевская
+      '9': '#999999',   // Серпуховско-Тимирязевская (серая)
+      '10': '#99CC00',  // Люблинско-Дмитровская (салатовая)
+      '11': '#82C0C0',  // Большая кольцевая (бирюзовая)
+      '11а': '#82C0C0', // БКЛ
+      '12': '#A1B3D4',  // Бутовская (серо-голубая)
+      '13': '#9999FF',  // Монорельс
+      '14': '#FFFFFF',  // МЦК (белый с красным контуром)
+      '15': '#DE64A1',  // Некрасовская (розовая)
+      '16': '#1E2560',  // Троицкая (изумрудно-синяя)
+      'д1': '#F6A600',  // МЦД-1 (физтех/одинцово)
+      'd1': '#F6A600',
+      'д2': '#E74280',  // МЦД-2 (нахабино/подольск)
+      'd2': '#E74280',
+      'д3': '#E95D0F',  // МЦД-3 (зеленоград/раменское)
+      'd3': '#E95D0F',
+      'д4': '#40B286',  // МЦД-4 (железнодорожная/апрелевка)
+      'd4': '#40B286'
+    };
+
+    function getMetroColor(lineRaw, fallbackColor) {
+      if (!lineRaw) return fallbackColor || '#999999';
+      const clean = String(lineRaw).toLowerCase().trim().replace(/^м\./, '').replace(/^линия\s*/, '');
+      return MOSCOW_METRO_COLORS[clean] || fallbackColor || '#999999';
+    }
+
     // Отрисовка локации
     function renderLocation(st, statusData, rootData) {
       const locBar = document.getElementById('locationBar');
@@ -1446,7 +1541,10 @@
         if (metroName) metroName.textContent = `м. ${loc.metro.name}`;
         if (metroCircle) {
           metroCircle.textContent = loc.metro.line || '';
-          if (loc.metro.color) metroCircle.style.backgroundColor = loc.metro.color;
+          const mColor = getMetroColor(loc.metro.line, loc.metro.color);
+          metroCircle.style.backgroundColor = mColor;
+          // Белый или светлый текст в зависимости от яркости
+          metroCircle.style.color = (['14', '8', '8а'].includes(String(loc.metro.line))) ? '#1a1a1a' : '#ffffff';
         }
       } else {
         if (metroTag) metroTag.style.display = 'none';
@@ -1779,29 +1877,31 @@
       document.removeEventListener('mouseup', onUp);
     }
 
-    window.addEventListener('DOMContentLoaded', () => {
-      try {
-        currentStatus = getInitialStatus();
-        renderData();
+    // Мгновенный первичный рендер синхронно до первой отрисовки страницы
+    try {
+      currentStatus = getInitialStatus();
+      renderData();
+    } catch (err) {
+      console.error('Ошибка первичного рендера:', err);
+    }
 
-        // Загрузка свежего списка участников из базы бота в обход кэша
-        fetch('./participants.json?t=' + Date.now(), { cache: 'no-store' })
-          .then(res => {
-            if (!res.ok) throw new Error('Status ' + res.status);
-            return res.json();
-          })
-          .then(data => {
-            if (Array.isArray(data) && data.length > 0) {
-              cachedParticipants = data;
-              renderParticipants(data, currentStatus);
-            }
-          })
-          .catch(err => {
-            console.log('Используется встроенный список участников:', err);
-          });
-      } catch (err) {
-        console.error('Ошибка инициализации:', err);
-      }
+    window.addEventListener('DOMContentLoaded', () => {
+      // Загрузка свежего списка участников из базы бота в обход кэша
+      fetch('./participants.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(res => {
+          if (!res.ok) throw new Error('Status ' + res.status);
+          return res.json();
+        })
+        .then(data => {
+          if (Array.isArray(data) && data.length > 0) {
+            cachedParticipants = data;
+            renderParticipants(data, currentStatus);
+          }
+        })
+        .catch(err => {
+          console.log('Используется встроенный список участников:', err);
+        });
+
       centerWindow();
     });
 
